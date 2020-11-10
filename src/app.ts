@@ -1,20 +1,33 @@
 import express from "express";
 import cors from "cors";
-import indexRouter from "./routes";
-import dotenv from "dotenv";
-dotenv.config();
+import { createConnection } from "typeorm";
+import morgan from "morgan";
+
+import authRouter from "./routes/auth";
+
+createConnection()
+  .then(() => {
+    console.log("Database Connected :)");
+  })
+  .catch((error) => console.log(error));
 
 const app = express();
-const port = 5000;
 
-app.use("/", indexRouter);
+const port = process.env.PORT || 5000;
+app.set("port", port);
+
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
+app.use("/users", authRouter);
+
 app.get("/", (req, res) => {
+  console.log(process.env.NODE_ENV);
   res.send("hello TIL");
 });
 
-app.set("port", port);
 app.listen(app.get("port"), () => {
   console.log(`사용중인 포트 ${app.get("port")}`);
 });
