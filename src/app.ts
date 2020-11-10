@@ -24,7 +24,6 @@ app.use(cors());
 app.use("/users", authRouter);
 
 app.get("/", (req, res) => {
-  console.log(process.env.NODE_ENV);
   res.send("hello TIL");
 });
 
