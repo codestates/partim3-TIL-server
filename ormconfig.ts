@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 // production: {
 //   type: process.env.TYPEORM_CONNECTION,
 //   host: process.env.TYPEORM_HOST,
@@ -17,12 +19,12 @@
 //   },
 // },
 export default {
-  type: "mysql",
-  host: "localhost",
-  port: 3306,
-  username: "root",
-  password: "1234",
-  database: "TIL",
+  type: process.env.LOCAL_CONNECTION,
+  host: process.env.LOCAL_HOST,
+  port: process.env.LOCAL_PORT,
+  username: process.env.LOCAL_USERNAME,
+  password: process.env.LOACL_PASSWORD,
+  database: process.env.LOCAL_DATABASE,
   synchronize: true,
   logging: false,
   entities: ["src/db/entities/**/*.ts"],
