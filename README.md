@@ -13,6 +13,7 @@ npm install -g typeorm
 
 PORT = 5000
 
+TOKEN_SECRET = TIL
 LOCAL_CONNECTION = mysql
 LOCAL_HOST = localhost
 LOCAL_PORT = 3306

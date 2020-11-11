@@ -20,6 +20,7 @@ export default async (req: Request, res: Response) => {
         nickname,
       })
       .execute();
+
     return res.status(200).send("회원 가입 완료");
   } else {
     if (user.email === email) {

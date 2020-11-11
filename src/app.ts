@@ -7,7 +7,7 @@ import authRouter from "./routes/auth";
 
 createConnection()
   .then(() => {
-    console.log("Database Connected :)");
+    console.log("Database Connected");
   })
   .catch((error) => console.log(error));
 
