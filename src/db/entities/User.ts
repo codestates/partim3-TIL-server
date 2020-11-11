@@ -21,6 +21,12 @@ export class User extends BaseEntity {
   @Column()
   nickname!: string;
 
+  @Column()
+  oauthType!: string;
+
+  @Column()
+  token!: string;
+
   @CreateDateColumn({ name: "created_at" })
   createAt!: Date;
 
