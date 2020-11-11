@@ -12,19 +12,34 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   email!: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   password!: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   nickname!: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   oauthType!: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
+  socialId!: string;
+
+  @Column({
+    nullable: true,
+  })
   token!: string;
 
   @CreateDateColumn({ name: "created_at" })
