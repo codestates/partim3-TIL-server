@@ -39,7 +39,7 @@ export default async (req: Request, res: Response) => {
         })
         .execute();
 
-      res.setHeader("Authorizatioin", token);
+      res.setHeader("Authorization", token);
 
       return res.status(200).send("유저데이터 추가 및 토큰 생성완료");
     } else if (user.socialId === id && user.oauthType === oauthType) {
@@ -57,7 +57,7 @@ export default async (req: Request, res: Response) => {
         .where("socialId = :socialId", { socialId: id })
         .execute();
 
-      res.setHeader("Authorizatioin", token);
+      res.setHeader("Authorization", token);
 
       return res.status(200).send("토큰 생성 완료");
     } else {
@@ -88,7 +88,7 @@ export default async (req: Request, res: Response) => {
         .where("email = :email", { email })
         .execute();
 
-      res.setHeader("Authorizatioin", token);
+      res.setHeader("Authorization", token);
 
       return res.status(200).send("로그인 완료 및 토큰 생성 완료");
     }

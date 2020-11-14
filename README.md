@@ -11,7 +11,7 @@ npm install -g typeorm
 .env 파일 생성후
 환경변수 입력
 
-PORT = 5000
+PORT =
 
 TOKEN_SECRET = TIL
 LOCAL_CONNECTION = mysql
