@@ -36,7 +36,10 @@ export default async (req: Request, res: Response) => {
       .execute();
 
     return res.status(200).send("닉네임, 비밀번호 변경 완료!!");
-  } else if (user.password !== password && user.nickname !== nickname) {
+  } else if (
+    user.password !== password ||
+    (user.password !== newPassword && user.nickname !== nickname)
+  ) {
     await getConnection()
       .createQueryBuilder()
       .update(User)
@@ -51,6 +54,7 @@ export default async (req: Request, res: Response) => {
     user.nickname === nickname
   ) {
     return res.status(409).send("변경사항 없음!!");
+  } else {
   }
   return res.status(400);
 };
