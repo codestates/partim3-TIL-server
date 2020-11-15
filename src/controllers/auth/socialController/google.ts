@@ -67,8 +67,9 @@ export default async (req: Request, res: Response) => {
         .set({ token: "1234" })
         .where("socialId = :socialId", { socialId: userid })
         .execute()
-        .then((result) => {})
-        .catch();
+        .catch((error) => {
+          console.log(error);
+        });
 
       await getRepository(User)
         .createQueryBuilder("user")
@@ -81,7 +82,9 @@ export default async (req: Request, res: Response) => {
             token: result?.token,
           });
         })
-        .catch();
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }
   return res.status(400);
