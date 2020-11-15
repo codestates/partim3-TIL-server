@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import socialController from "./socialController";
 
 export default (req: Request, res: Response) => {
-  const { oauthType } = req.body;
+  const oauthType = req.params.id;
 
   switch (oauthType) {
     case "github":

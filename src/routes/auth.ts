@@ -7,6 +7,6 @@ router.post("/signup", authController.signup);
 router.post("/login", authController.login);
 router.post("/mypage", authController.mypage);
 router.post("/logout", authController.logout);
-router.post("/social", authController.social);
+router.post("/social/:id", authController.social);
 
 export default router;
