@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default async (req: Request, res: Response) => {
+
   const { email, password } = req.body;
 
   const user = await getRepository(User)
