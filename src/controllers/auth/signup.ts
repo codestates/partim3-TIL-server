@@ -27,5 +27,5 @@ export default async (req: Request, res: Response) => {
       return res.status(409).send("가입되어 있는 이메일");
     }
   }
-  res.status(400);
+  return res.status(400);
 };
