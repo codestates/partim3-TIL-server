@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import socialController from "./socialController";
 
-export default async (req: Request, res: Response) => {
+export default (req: Request, res: Response) => {
   const { oauthType } = req.body;
 
   switch (oauthType) {
