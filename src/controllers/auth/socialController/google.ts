@@ -9,7 +9,8 @@ import { OAuth2Client } from "google-auth-library";
 dotenv.config();
 
 export default async (req: Request, res: Response) => {
-  const { oauthType, idToken } = req.body;
+  const { idToken } = req.body;
+  const oauthType = req.params.id;
 
   const client = new OAuth2Client(process.env.GOOGLE_CLIENTID);
 
@@ -23,19 +24,19 @@ export default async (req: Request, res: Response) => {
   if (payload === undefined) {
     res.status(409).send("error");
   } else {
-    const userid = payload["sub"];
+    const socialId = payload["sub"];
     const nickname = payload["name"];
 
     const token: any = await jwt.sign(
       {
-        userid,
+        socialId,
       },
       `${process.env.TOKEN_SECRET}`
     );
 
     const user = await getRepository(User)
       .createQueryBuilder("user")
-      .where("user.socialId= :socialId", { socialId: userid })
+      .where("user.socialId= :socialId", { socialId })
       .getOne();
 
     if (user === undefined) {
@@ -46,7 +47,7 @@ export default async (req: Request, res: Response) => {
         .values({
           oauthType,
           nickname,
-          socialId: userid,
+          socialId,
           token,
         })
         .execute()
@@ -64,8 +65,8 @@ export default async (req: Request, res: Response) => {
       await getConnection()
         .createQueryBuilder()
         .update(User)
-        .set({ token: "1234" })
-        .where("socialId = :socialId", { socialId: userid })
+        .set({ token })
+        .where("socialId = :socialId", { socialId })
         .execute()
         .catch((error) => {
           console.log(error);
@@ -73,7 +74,7 @@ export default async (req: Request, res: Response) => {
 
       await getRepository(User)
         .createQueryBuilder("user")
-        .where("user.socialId= :socialId", { socialId: userid })
+        .where("user.socialId= :socialId", { socialId })
         .getOne()
         .then((result) => {
           return res.status(200).json({
