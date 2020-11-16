@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production tsc && node dist/app.js",
     "dev": "cross-env NODE_ENV=development nodemon --exec ts-node src/app.ts",
-    "pm2:start": "cross-env NODE_ENV=production tsc && pm2 start dist/app.js",
+    "pm2:start": "cross-env NODE_ENV=production tsc && pm2 start dist/app.js && pm2 monit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
