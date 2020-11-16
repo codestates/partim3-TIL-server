@@ -1,19 +1,14 @@
 import express from "express";
 import cors from "cors";
-import { createConnection } from "typeorm";
 import morgan from "morgan";
-
 import authRouter from "./routes/auth";
-
-createConnection()
-  .then(() => {
-    console.log("Database Connected");
-  })
-  .catch((error) => console.log(error));
+import dbConnection from "./utils/typeormConnection";
 
 const app = express();
-
 const port = process.env.PORT || 5000;
+
+dbConnection();
+
 app.set("port", port);
 
 app.use(morgan("dev"));
