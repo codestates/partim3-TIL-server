@@ -1,4 +1,4 @@
-import { Request, response, Response } from "express";
+import { Request, Response } from "express";
 import { getRepository, getConnection } from "typeorm";
 import { User } from "../../../db/entities/User";
 import jwt from "jsonwebtoken";
@@ -8,15 +8,82 @@ import axios from "axios";
 dotenv.config();
 
 export default async (req: Request, res: Response) => {
-  const { token } = req.body;
-
-  process.env.GITHUB_CLIENTID;
-  process.env.GITHUB_SECRET;
+  const { idToken } = req.body;
+  const oauthType = req.params.id;
 
   const responseData = await axios.get("https://api.github.com/user", {
     headers: {
-      Authorization: "token " + "aa7c1f94be67796390ada2eea6834d57d798e748",
+      Authorization: "token " + idToken,
     },
   });
-  res.status(200).send("dldf");
+
+  if (responseData === undefined) {
+    return res.status(401).send("idToken 확인 바람");
+  } else {
+    const socialId = responseData.data.id;
+    const nickname = responseData.data.login;
+
+    const token: any = await jwt.sign(
+      {
+        socialId,
+      },
+      `${process.env.TOKEN_SECRET}`
+    );
+
+    const user = await getRepository(User)
+      .createQueryBuilder("user")
+      .where("user.socialId= :socialId", { socialId })
+      .getOne();
+
+    if (user === undefined) {
+      await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(User)
+        .values({
+          oauthType,
+          nickname,
+          socialId,
+          token,
+        })
+        .execute()
+        .then((result) => {
+          return res.status(200).json({
+            id: result.generatedMaps[0].id,
+            nickname,
+            token,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      await getConnection()
+        .createQueryBuilder()
+        .update(User)
+        .set({ token })
+        .where("socialId = :socialId", { socialId })
+        .execute()
+        .catch((error) => {
+          console.log(error);
+        });
+
+      await getRepository(User)
+        .createQueryBuilder("user")
+        .where("user.socialId= :socialId", { socialId })
+        .getOne()
+        .then((result) => {
+          return res.status(200).json({
+            id: result?.id,
+            nickname: result?.nickname,
+            token: result?.token,
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }
+
+  return res.status(400);
 };
