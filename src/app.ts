@@ -1,7 +1,10 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+
 import authRouter from "./routes/auth";
+import calenderRouter from "./routes/calender";
+
 import dbConnection from "./utils/typeormConnection";
 
 const app = express();
@@ -22,6 +25,7 @@ app.use(
 );
 
 app.use("/users", authRouter);
+app.use("/calender", calenderRouter);
 
 app.get("/", (req, res) => {
   res.send("hello TIL");

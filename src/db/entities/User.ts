@@ -1,3 +1,4 @@
+import { join } from "path";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -5,7 +6,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
+  JoinColumn,
+  OneToMany,
 } from "typeorm";
+import { Todo } from "./Todo";
 
 @Entity()
 export class User extends BaseEntity {
@@ -47,4 +51,8 @@ export class User extends BaseEntity {
 
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt!: Date;
+
+  @OneToMany((type) => Todo, (todo) => todo.user)
+  @JoinColumn()
+  todos!: Todo[];
 }
