@@ -5,21 +5,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-const typeorm_1 = require("typeorm");
 const morgan_1 = __importDefault(require("morgan"));
-require("dotenv/config");
-const routes_1 = __importDefault(require("./routes"));
-typeorm_1.createConnection()
-    .then(() => {
-    console.log("Database Connected :)");
-})
-    .catch((error) => console.log(error));
+const auth_1 = __importDefault(require("./routes/auth"));
+const typeormConnection_1 = __importDefault(require("./utils/typeormConnection"));
 const app = express_1.default();
 const port = process.env.PORT || 5000;
+typeormConnection_1.default();
 app.set("port", port);
 app.use(morgan_1.default("dev"));
-app.use("/", routes_1.default);
-app.use(cors_1.default());
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: false }));
+app.use(cors_1.default({
+    origin: ["http://localhost:3000"],
+    credentials: true,
+}));
+app.use("/users", auth_1.default);
 app.get("/", (req, res) => {
     res.send("hello TIL");
 });
