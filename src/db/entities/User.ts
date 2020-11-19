@@ -57,7 +57,7 @@ export class User extends BaseEntity {
   @JoinColumn()
   todos!: Todo[];
 
-  @OneToMany((type) => Todo, (todo) => todo.user)
+  @OneToMany((type) => Review, (review) => review.user)
   @JoinColumn()
   reviews!: Review[];
 }
