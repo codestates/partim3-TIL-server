@@ -10,6 +10,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { Todo } from "./Todo";
+import { Review } from "./Review";
 
 @Entity()
 export class User extends BaseEntity {
@@ -55,4 +56,8 @@ export class User extends BaseEntity {
   @OneToMany((type) => Todo, (todo) => todo.user)
   @JoinColumn()
   todos!: Todo[];
+
+  @OneToMany((type) => Todo, (todo) => todo.user)
+  @JoinColumn()
+  reviews!: Review[];
 }
