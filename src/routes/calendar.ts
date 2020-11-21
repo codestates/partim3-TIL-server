@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.post("/todo", calendarController.todo);
 router.post("/review", calendarController.review);
-router.post("/day", calendarController.day);
+router.get("/day", calendarController.day);
 
 export default router;

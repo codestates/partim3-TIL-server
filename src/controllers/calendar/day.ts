@@ -3,7 +3,7 @@ import { getRepository } from "typeorm";
 import { User } from "../../db/entities/User";
 
 export default async (req: Request, res: Response) => {
-  const { userId, date } = req.body;
+  const { userId, date } = req.params;
 
   const resultTodos: Array<any> = [];
   const resultReviews: Array<any> = [];
