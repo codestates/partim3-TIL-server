@@ -5,6 +5,8 @@ import { Review } from "../../db/entities/Review";
 export default async (req: Request, res: Response) => {
   const { id, title, context, imageUrl, scheduleTime } = req.body;
 
+  const date = JSON.stringify(scheduleTime);
+
   const result = await getConnection()
     .createQueryBuilder()
     .insert()
@@ -13,7 +15,7 @@ export default async (req: Request, res: Response) => {
       title,
       context,
       imageUrl,
-      scheduleTime,
+      scheduleTime: date,
       user: id,
     })
     .execute()
