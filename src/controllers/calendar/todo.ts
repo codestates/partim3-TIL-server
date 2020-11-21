@@ -1,27 +1,25 @@
 import { Request, Response } from "express";
 import { getConnection } from "typeorm";
-import { Review } from "../../db/entities/Review";
+import { Todo } from "../../db/entities/Todo";
 
 export default async (req: Request, res: Response) => {
-  const { id, title, context, imageUrl } = req.body;
+  const { id, title, scheduleTime } = req.body;
 
   const result = await getConnection()
     .createQueryBuilder()
     .insert()
-    .into(Review)
+    .into(Todo)
     .values({
       title,
-      context,
-      imageUrl,
+      scheduleTime,
       user: id,
     })
     .execute()
     .then(() => {
-      return res.status(200).send("Review 생성 완료");
+      return res.status(200).send("todo 생성 완료");
     })
     .catch((error) => {
       return res.status(401).send(error);
     });
-
   return res.status(400);
 };

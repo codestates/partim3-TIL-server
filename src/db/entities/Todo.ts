@@ -19,10 +19,10 @@ export class Todo extends BaseEntity {
   title!: string;
 
   @Column()
-  sceduleTime!: string;
+  scheduleTime!: string;
 
   @CreateDateColumn({ name: "created_at" })
-  createAt!: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt!: Date;
