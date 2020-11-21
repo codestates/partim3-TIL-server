@@ -21,6 +21,5 @@ export default async (req: Request, res: Response) => {
     .catch((error) => {
       return res.status(401).send(error);
     });
-
   return res.status(400);
 };
