@@ -24,8 +24,11 @@ export class Review extends BaseEntity {
   @Column()
   imageUrl!: string;
 
+  @Column()
+  scheduleTime!: string;
+
   @CreateDateColumn({ name: "created_at" })
-  createAt!: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt!: Date;

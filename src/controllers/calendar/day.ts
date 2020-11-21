@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
-import { resourceLimits } from "worker_threads";
 import { User } from "../../db/entities/User";
 
 export default async (req: Request, res: Response) => {
@@ -18,7 +17,7 @@ export default async (req: Request, res: Response) => {
       if (result !== undefined) {
         // tslint:disable-next-line: prefer-for-of
         for (let i = 0; i < result[0].todos.length; i++) {
-          if (result[0].todos[i].sceduleTime === date) {
+          if (result[0].todos[i].scheduleTime === date) {
             resultTodos.push(result[0].todos[i]);
           }
         }
@@ -38,10 +37,7 @@ export default async (req: Request, res: Response) => {
       if (result !== undefined) {
         // tslint:disable-next-line: prefer-for-of
         for (let i = 0; i < result[0].reviews.length; i++) {
-          const reviewDate = result[0].reviews[i].createAt
-            .toISOString()
-            .split("T")[0];
-          if (reviewDate === date) {
+          if (result[0].reviews[i].scheduleTime === date) {
             resultReviews.push(result[0].reviews[i]);
           }
         }
