@@ -1,11 +1,11 @@
-import { Request, Response } from "express";
-import { getConnection } from "typeorm";
-import { Review } from "../../db/entities/Review";
+import { Request, Response } from 'express';
+import { getConnection } from 'typeorm';
+import { Review } from '../../db/entities/Review';
 
 export default async (req: Request, res: Response) => {
-  const { id, title, context, imageUrl, scheduleTime } = req.body;
+  const { id, title, context, imageUrl, scheduleTime } = req.body as Review;
 
-  const result = await getConnection()
+  await getConnection()
     .createQueryBuilder()
     .insert()
     .into(Review)
@@ -18,7 +18,7 @@ export default async (req: Request, res: Response) => {
     })
     .execute()
     .then(() => {
-      return res.status(200).send("Review 생성 완료");
+      return res.status(200).send('Review 생성 완료');
     })
     .catch((error) => {
       return res.status(401).send(error);

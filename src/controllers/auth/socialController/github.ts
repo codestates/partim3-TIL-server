@@ -1,29 +1,27 @@
-import { Request, Response } from "express";
-import { getRepository, getConnection } from "typeorm";
-import { User } from "../../../db/entities/User";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-import axios from "axios";
-
-dotenv.config();
+import { Request, Response } from 'express';
+import { getRepository, getConnection } from 'typeorm';
+import { User } from '../../../db/entities/User';
+import jwt from 'jsonwebtoken';
+import axios from 'axios';
+import { IUser } from '../../../types/IUser';
 
 export default async (req: Request, res: Response) => {
-  const { idToken } = req.body;
+  const { idToken } = req.body as IUser;
   const oauthType = req.params.id;
 
-  const responseData = await axios.get("https://api.github.com/user", {
+  const responseData = await axios.get('https://api.github.com/user', {
     headers: {
-      Authorization: "token " + idToken,
+      Authorization: `token ${idToken}`,
     },
   });
 
   if (responseData === undefined) {
-    return res.status(401).send("idToken 확인 바람");
+    return res.status(401).send('idToken 확인 바람');
   } else {
-    const socialId = responseData.data.id;
+    const socialId = Number(responseData.data.id);
     const nickname = responseData.data.login;
 
-    const token: any = await jwt.sign(
+    const token = await jwt.sign(
       {
         socialId,
       },
@@ -31,8 +29,8 @@ export default async (req: Request, res: Response) => {
     );
 
     const user = await getRepository(User)
-      .createQueryBuilder("user")
-      .where("user.socialId= :socialId", { socialId })
+      .createQueryBuilder('user')
+      .where('user.socialId= :socialId', { socialId })
       .getOne();
 
     if (user === undefined) {
@@ -62,15 +60,15 @@ export default async (req: Request, res: Response) => {
         .createQueryBuilder()
         .update(User)
         .set({ token })
-        .where("socialId = :socialId", { socialId })
+        .where('socialId = :socialId', { socialId })
         .execute()
         .catch((error) => {
           console.log(error);
         });
 
       await getRepository(User)
-        .createQueryBuilder("user")
-        .where("user.socialId= :socialId", { socialId })
+        .createQueryBuilder('user')
+        .where('user.socialId= :socialId', { socialId })
         .getOne()
         .then((result) => {
           return res.status(200).json({

@@ -1,4 +1,3 @@
-import { join } from "path";
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -8,9 +7,9 @@ import {
   BaseEntity,
   JoinColumn,
   OneToMany,
-} from "typeorm";
-import { Todo } from "./Todo";
-import { Review } from "./Review";
+} from 'typeorm';
+import { Todo } from './Todo';
+import { Review } from './Review';
 
 @Entity()
 export class User extends BaseEntity {
@@ -47,10 +46,10 @@ export class User extends BaseEntity {
   })
   token!: string;
 
-  @CreateDateColumn({ name: "created_at" })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn({ name: "updated_at" })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 
   @OneToMany((type) => Todo, (todo) => todo.user)
