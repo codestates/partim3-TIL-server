@@ -1,32 +1,31 @@
-import { Request, Response } from "express";
-import { getRepository } from "typeorm";
-import { User } from "../../db/entities/User";
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { Request, Response } from 'express';
+import { getRepository } from 'typeorm';
+import { User } from '../../db/entities/User';
+import { IDate } from '../../types/IDate';
 
 export default async (req: Request, res: Response) => {
   const userId = Number(req.query.userId);
-  const date = JSON.parse(req.query.date as string);
-
-  console.log("데이트다", typeof userId, date);
+  const date = JSON.parse(req.query.date as string) as IDate;
 
   const todos: Array<any> = [];
   const reviews: Array<any> = [];
 
   await getRepository(User)
-    .createQueryBuilder("user")
-    .leftJoinAndSelect("user.todos", "todo")
-    .where("user.id = :id", { id: userId })
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.todos', 'todo')
+    .where('user.id = :id', { id: userId })
     .getMany()
     .then((result) => {
       if (result !== undefined) {
-        // tslint:disable-next-line: prefer-for-of
-        for (let i = 0; i < result[0].todos.length; i++) {
-          const currentDay = JSON.parse(result[0].reviews[i].scheduleTime);
+        for (const element of result[0].todos) {
+          const currentDay = JSON.parse(element.scheduleTime) as IDate;
           if (
             currentDay.year === date.year &&
-            currentDay.month === date.year &&
+            currentDay.month === date.month &&
             currentDay.day === date.day
           ) {
-            todos.push(result[0].todos[i]);
+            todos.push(element);
           }
         }
       }
@@ -36,21 +35,20 @@ export default async (req: Request, res: Response) => {
     });
 
   await getRepository(User)
-    .createQueryBuilder("user")
-    .leftJoinAndSelect("user.reviews", "review")
-    .where("user.id = :id", { id: userId })
+    .createQueryBuilder('user')
+    .leftJoinAndSelect('user.reviews', 'review')
+    .where('user.id = :id', { id: userId })
     .getMany()
     .then((result) => {
       if (result !== undefined) {
-        // tslint:disable-next-line: prefer-for-of
-        for (let i = 0; i < result[0].reviews.length; i++) {
-          const currentDay = JSON.parse(result[0].reviews[i].scheduleTime);
+        for (const element of result[0].reviews) {
+          const currentDay = JSON.parse(element.scheduleTime) as IDate;
           if (
             currentDay.year === date.year &&
-            currentDay.month === date.year &&
+            currentDay.month === date.month &&
             currentDay.day === date.day
           ) {
-            reviews.push(result[0].reviews[i]);
+            reviews.push(element);
           }
         }
       }

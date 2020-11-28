@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const morgan_1 = __importDefault(require("morgan"));
 const auth_1 = __importDefault(require("./routes/auth"));
+const calendar_1 = __importDefault(require("./routes/calendar"));
 const typeormConnection_1 = __importDefault(require("./utils/typeormConnection"));
 const app = express_1.default();
 const port = process.env.PORT || 5000;
@@ -20,6 +21,7 @@ app.use(cors_1.default({
     credentials: true,
 }));
 app.use("/users", auth_1.default);
+app.use("/calendar", calendar_1.default);
 app.get("/", (req, res) => {
     res.send("hello TIL");
 });

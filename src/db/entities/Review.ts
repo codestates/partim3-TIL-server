@@ -7,8 +7,8 @@ import {
   BaseEntity,
   JoinColumn,
   ManyToOne,
-} from "typeorm";
-import { User } from "./User";
+} from 'typeorm';
+import { User } from './User';
 
 @Entity()
 export class Review extends BaseEntity {
@@ -27,13 +27,16 @@ export class Review extends BaseEntity {
   @Column()
   scheduleTime!: string;
 
-  @CreateDateColumn({ name: "created_at" })
+  @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
-  @UpdateDateColumn({ name: "updated_at" })
+  @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 
-  @ManyToOne((type) => User, (user) => user.reviews, { onDelete: "CASCADE" })
+  @ManyToOne((type) => User, (user) => user.reviews, {
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
   @JoinColumn()
-  user!: User;
+  user!: number;
 }

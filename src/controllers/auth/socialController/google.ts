@@ -1,12 +1,9 @@
-import { Request, Response } from "express";
-import { getRepository, getConnection } from "typeorm";
-import { User } from "../../../db/entities/User";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
+import { Request, Response } from 'express';
+import { getRepository, getConnection } from 'typeorm';
+import { User } from '../../../db/entities/User';
+import jwt from 'jsonwebtoken';
 
-import { OAuth2Client } from "google-auth-library";
-
-dotenv.config();
+import { OAuth2Client } from 'google-auth-library';
 
 export default async (req: Request, res: Response) => {
   const { idToken } = req.body;
@@ -22,10 +19,10 @@ export default async (req: Request, res: Response) => {
   const payload = ticket.getPayload();
 
   if (payload === undefined) {
-    res.status(409).send("error");
+    res.status(409).send('error');
   } else {
-    const socialId = payload["sub"];
-    const nickname = payload["name"];
+    const socialId = payload['sub'];
+    const nickname = payload['name'];
 
     const token: any = await jwt.sign(
       {
@@ -35,8 +32,8 @@ export default async (req: Request, res: Response) => {
     );
 
     const user = await getRepository(User)
-      .createQueryBuilder("user")
-      .where("user.socialId= :socialId", { socialId })
+      .createQueryBuilder('user')
+      .where('user.socialId= :socialId', { socialId })
       .getOne();
 
     if (user === undefined) {
@@ -66,15 +63,15 @@ export default async (req: Request, res: Response) => {
         .createQueryBuilder()
         .update(User)
         .set({ token })
-        .where("socialId = :socialId", { socialId })
+        .where('socialId = :socialId', { socialId })
         .execute()
         .catch((error) => {
           console.log(error);
         });
 
       await getRepository(User)
-        .createQueryBuilder("user")
-        .where("user.socialId= :socialId", { socialId })
+        .createQueryBuilder('user')
+        .where('user.socialId= :socialId', { socialId })
         .getOne()
         .then((result) => {
           return res.status(200).json({
