@@ -5,11 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
-  JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { Todo } from './Todo';
-import { Review } from './Review';
+import { UserCalendarAuthority } from './UserCalendarAuthority';
+import { CalendarAuthority } from './CalendarAuthority';
+import { Calendar } from './Calendar';
+import { Tag } from './Tag';
 
 @Entity()
 export class User extends BaseEntity {
@@ -52,11 +53,21 @@ export class User extends BaseEntity {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 
-  @OneToMany((type) => Todo, (todo) => todo.user)
-  @JoinColumn()
-  todos!: Todo[];
+  @OneToMany(
+    () => UserCalendarAuthority,
+    (userCalendarAuthority) => userCalendarAuthority.user
+  )
+  userAuthorities!: UserCalendarAuthority[];
 
-  @OneToMany((type) => Review, (review) => review.user)
-  @JoinColumn()
-  reviews!: Review[];
+  @OneToMany(
+    () => CalendarAuthority,
+    (calendarAuthority) => calendarAuthority.owner
+  )
+  myCalendarAuthorities!: CalendarAuthority[];
+
+  @OneToMany(() => Calendar, (calendar) => calendar.owner)
+  myCalendars!: Calendar[];
+
+  @OneToMany(() => Tag, (tag) => tag.user)
+  tags!: Tag[];
 }

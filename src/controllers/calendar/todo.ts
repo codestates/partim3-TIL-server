@@ -12,7 +12,7 @@ export default async (req: Request, res: Response) => {
     .values({
       title,
       scheduleTime,
-      user: id,
+      calendar: id,
     })
     .execute()
     .then(() => {

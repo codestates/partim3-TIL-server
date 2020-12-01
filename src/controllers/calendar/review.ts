@@ -14,7 +14,7 @@ export default async (req: Request, res: Response) => {
       context,
       imageUrl,
       scheduleTime,
-      user: id,
+      calendar: id,
     })
     .execute()
     .then(() => {
