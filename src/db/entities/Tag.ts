@@ -9,19 +9,20 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { Calendar } from './Calendar';
+import { User } from './User';
 import { TodoTag } from './TodoTag';
+import { ReviewTag } from './ReviewTag';
 
 @Entity()
-export class Todo extends BaseEntity {
+export class Tag extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Column()
-  title!: string;
+  tagName!: string;
 
   @Column()
-  scheduleTime!: string;
+  tagColor!: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
@@ -29,13 +30,16 @@ export class Todo extends BaseEntity {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 
-  @ManyToOne(() => Calendar, (calendar) => calendar.todos, {
+  @ManyToOne(() => User, (user) => user.tags, {
     onDelete: 'CASCADE',
     nullable: false,
   })
   @JoinColumn()
-  calendar!: number;
+  user!: number;
 
-  @OneToMany(() => TodoTag, (todoTag) => todoTag.todo)
+  @OneToMany(() => TodoTag, (todoTag) => todoTag.tag)
   todoTags!: TodoTag[];
+
+  @OneToMany(() => ReviewTag, (reviewTag) => reviewTag.tag)
+  reviewTags!: ReviewTag[];
 }

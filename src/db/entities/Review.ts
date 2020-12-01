@@ -7,8 +7,10 @@ import {
   BaseEntity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
-import { User } from './User';
+import { Calendar } from './Calendar';
+import { ReviewTag } from './ReviewTag';
 
 @Entity()
 export class Review extends BaseEntity {
@@ -33,10 +35,13 @@ export class Review extends BaseEntity {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 
-  @ManyToOne((type) => User, (user) => user.reviews, {
+  @ManyToOne(() => Calendar, (calendar) => calendar.reviews, {
     onDelete: 'CASCADE',
     nullable: false,
   })
   @JoinColumn()
-  user!: number;
+  calendar!: number;
+
+  @OneToMany(() => ReviewTag, (reviewTag) => reviewTag.review)
+  reviewTags!: ReviewTag[];
 }

@@ -7,21 +7,14 @@ import {
   BaseEntity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
 } from 'typeorm';
-import { Calendar } from './Calendar';
-import { TodoTag } from './TodoTag';
+import { Tag } from './Tag';
+import { Todo } from './Todo';
 
 @Entity()
-export class Todo extends BaseEntity {
+export class TodoTag extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
-
-  @Column()
-  title!: string;
-
-  @Column()
-  scheduleTime!: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
@@ -29,13 +22,17 @@ export class Todo extends BaseEntity {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt!: Date;
 
-  @ManyToOne(() => Calendar, (calendar) => calendar.todos, {
+  @ManyToOne(() => Tag, (tag) => tag.todoTags, {
     onDelete: 'CASCADE',
     nullable: false,
   })
   @JoinColumn()
-  calendar!: number;
+  tag!: number;
 
-  @OneToMany(() => TodoTag, (todoTag) => todoTag.todo)
-  todoTags!: TodoTag[];
+  @ManyToOne(() => Todo, (todo) => todo.todoTags, {
+    onDelete: 'CASCADE',
+    nullable: false,
+  })
+  @JoinColumn()
+  todo!: number;
 }
