@@ -3,12 +3,12 @@ import { getRepository } from 'typeorm';
 import { User } from '../../db/entities/User';
 
 export default async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const userId = Number(req.query.userId);
 
   const _myCalendars = await getRepository(User)
     .createQueryBuilder('user')
     .leftJoinAndSelect('user.myCalendars', 'myCalendars')
-    .where('user.id= :id', { id })
+    .where('user.id= :id', { id: userId })
     .getMany();
 
   if (_myCalendars[0]) {
