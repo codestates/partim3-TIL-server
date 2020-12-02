@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 if (process.env.NODE_ENV === 'production') {
   dotenv.config({
-    path: `./env/development.env`,
+    path: `./env/production.env`,
   });
 }
 
