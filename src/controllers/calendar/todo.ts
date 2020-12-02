@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import { getConnection } from 'typeorm';
+import { ITodo } from '../../types/ITodo';
 import { Todo } from '../../db/entities/Todo';
 
 export default async (req: Request, res: Response) => {
-  const { id, title, scheduleTime } = req.body as Todo;
+  const { title, scheduleTime, calendarId } = req.body as ITodo;
 
   await getConnection()
     .createQueryBuilder()
@@ -12,11 +13,11 @@ export default async (req: Request, res: Response) => {
     .values({
       title,
       scheduleTime,
-      calendar: id,
+      calendar: calendarId,
     })
     .execute()
     .then(() => {
-      return res.status(200).send('Review 생성 완료');
+      return res.status(200).send('Todo 생성 완료');
     })
     .catch((error) => {
       return res.status(401).send(error);

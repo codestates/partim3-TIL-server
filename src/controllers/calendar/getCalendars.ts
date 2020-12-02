@@ -9,12 +9,17 @@ export default async (req: Request, res: Response) => {
     .createQueryBuilder('user')
     .leftJoinAndSelect('user.myCalendars', 'myCalendars')
     .where('user.id= :id', { id: userId })
-    .getMany();
-
-  if (_myCalendars[0]) {
-    return res.status(200).json({
-      myCalendars: _myCalendars[0].myCalendars,
+    .getMany()
+    .catch((error) => {
+      res.status(401).send(error);
     });
+
+  if (_myCalendars) {
+    if (_myCalendars[0]) {
+      return res.status(200).json({
+        myCalendars: _myCalendars[0].myCalendars,
+      });
+    }
   }
 
   return res.status(400);
