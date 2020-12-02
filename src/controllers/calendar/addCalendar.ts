@@ -16,6 +16,7 @@ export default async (req: Request, res: Response) => {
     .where('user.id= :id', { id })
     .getMany();
 
+  console.log(myCalendars[0].myCalendars);
   if (myCalendars[0]) {
     for await (const element of myCalendars[0].myCalendars) {
       if (element.name === name) {

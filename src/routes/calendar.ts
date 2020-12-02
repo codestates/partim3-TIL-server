@@ -8,5 +8,6 @@ router.post('/review', calendarController.review);
 router.post('/addcalendar', calendarController.addCalendar);
 router.post('/addtag', calendarController.addTag);
 router.get('/day', calendarController.day);
+router.get('/calendars/:id', calendarController.getCalendars);
 
 export default router;
