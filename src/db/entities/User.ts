@@ -28,7 +28,7 @@ export class User extends BaseEntity {
   password!: string;
 
   @Column({
-    nullable: true,
+    nullable: false,
   })
   nickname!: string;
 
