@@ -21,7 +21,7 @@ export default {
   database: process.env.DB_DATABASE,
   synchronize: true,
   logging: false,
-  entities: ['db/entities/**/*{.ts,.js}'],
+  entities: [process.env.ENTITIES],
   migrations: ['db/migrations/**/*.ts'],
   subscribers: ['subscriber/**/*.ts'],
   cli: {

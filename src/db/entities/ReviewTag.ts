@@ -1,14 +1,12 @@
 import {
   Entity,
   PrimaryGeneratedColumn,
-  Column,
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
-import review from '../../controllers/calendar/review';
 import { Review } from './Review';
 import { Tag } from './Tag';
 
