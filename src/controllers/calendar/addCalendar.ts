@@ -10,13 +10,18 @@ export default async (req: Request, res: Response) => {
   const { id } = req.body as IUser;
   const { name, color } = req.body as ICalendar;
 
+  const user = await getRepository(User)
+    .createQueryBuilder('user')
+    .where('user.id= :id', { id })
+    .getOne();
+
   const myCalendars = await getRepository(User)
     .createQueryBuilder('user')
     .leftJoinAndSelect('user.myCalendars', 'myCalendars')
     .where('user.id= :id', { id })
     .getMany();
 
-  console.log(myCalendars[0].myCalendars);
+  console.log(user);
   if (myCalendars[0]) {
     for await (const element of myCalendars[0].myCalendars) {
       if (element.name === name) {
@@ -44,7 +49,7 @@ export default async (req: Request, res: Response) => {
       read: true,
       write: true,
       auth: true,
-      ownerNickname: myCalendars[0].nickname,
+      ownerNickname: user?.nickname,
       calendar: calendar.identifiers[0].id as number,
       owner: id,
     })
