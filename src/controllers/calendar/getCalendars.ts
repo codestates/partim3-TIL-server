@@ -1,9 +1,5 @@
 import { Request, Response } from 'express';
-import { getConnection, getRepository } from 'typeorm';
-import { ICalendar } from '../../types/ICalendar';
-import { Calendar } from '../../db/entities/Calendar';
-import { CalendarAuthority } from '../../db/entities/CalendarAuthority';
-import { IUser } from '../../types/IUser';
+import { getRepository } from 'typeorm';
 import { User } from '../../db/entities/User';
 
 export default async (req: Request, res: Response) => {
