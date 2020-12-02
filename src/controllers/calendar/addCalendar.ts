@@ -17,7 +17,7 @@ export default async (req: Request, res: Response) => {
     .getMany();
 
   if (myCalendars[0]) {
-    for (const element of myCalendars[0].myCalendars) {
+    for await (const element of myCalendars[0].myCalendars) {
       if (element.name === name) {
         return res.status(401).send('이미 있는 캘린더 이름');
       }
@@ -43,11 +43,17 @@ export default async (req: Request, res: Response) => {
       read: true,
       write: true,
       auth: true,
-      ownerNickname: 'asdf',
-      calendar: calendar.identifiers[0].id,
+      ownerNickname: myCalendars[0].nickname,
+      calendar: calendar.identifiers[0].id as number,
       owner: id,
     })
-    .execute();
+    .execute()
+    .then(() => {
+      return res.status(200).send('캘린더 생성 완료');
+    })
+    .catch((error) => {
+      return res.status(401).send(error);
+    });
 
   return res.status(400);
 };

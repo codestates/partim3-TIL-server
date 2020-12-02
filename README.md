@@ -34,6 +34,10 @@ DB_USERNAME=
 DB_PASSWORD=
 DB_DATABASE=
 
+## ormconfig.ts ##
+
+ENTITIES=src/db/entities/**/*{.ts,.js}
+
 TOKEN_SECRET=
 
 KAKAO_CLIENTID=
