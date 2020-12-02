@@ -1,5 +1,5 @@
 export interface ITag {
-  id: number;
+  userId: number;
   tagName: string;
   tagColor: string;
 }
