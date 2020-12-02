@@ -1,5 +1,5 @@
 export interface IReview {
-  id: number;
+  calendarId: number;
   title: string;
   context: string;
   imageUrl: string;

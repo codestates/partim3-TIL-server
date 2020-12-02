@@ -1,9 +1,16 @@
 import { Request, Response } from 'express';
 import { getConnection } from 'typeorm';
 import { Review } from '../../db/entities/Review';
+import { IReview } from '../../types/IReview';
 
 export default async (req: Request, res: Response) => {
-  const { id, title, context, imageUrl, scheduleTime } = req.body as Review;
+  const {
+    title,
+    context,
+    imageUrl,
+    scheduleTime,
+    calendarId,
+  } = req.body as IReview;
 
   await getConnection()
     .createQueryBuilder()
@@ -14,7 +21,7 @@ export default async (req: Request, res: Response) => {
       context,
       imageUrl,
       scheduleTime,
-      calendar: id,
+      calendar: calendarId,
     })
     .execute()
     .then(() => {
