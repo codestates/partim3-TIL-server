@@ -4,6 +4,7 @@ import day from './day';
 import addCalendar from './addCalendar';
 import addTag from './addTag';
 import getCalendars from './getCalendars';
+import getTags from './getTags';
 
 export default {
   todo,
@@ -12,4 +13,5 @@ export default {
   addCalendar,
   addTag,
   getCalendars,
+  getTags,
 };
