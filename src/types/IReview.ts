@@ -4,4 +4,5 @@ export interface IReview {
   context: string;
   imageUrl: string;
   scheduleTime: string;
+  scheduleDate: string;
 }

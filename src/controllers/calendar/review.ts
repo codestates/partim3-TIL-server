@@ -8,6 +8,7 @@ export default async (req: Request, res: Response) => {
     title,
     context,
     imageUrl,
+    scheduleDate,
     scheduleTime,
     calendarId,
   } = req.body as IReview;
@@ -20,6 +21,7 @@ export default async (req: Request, res: Response) => {
       title,
       context,
       imageUrl,
+      scheduleDate,
       scheduleTime,
       calendar: calendarId,
     })

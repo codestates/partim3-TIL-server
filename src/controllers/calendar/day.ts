@@ -1,66 +1,51 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { Brackets, getRepository } from 'typeorm';
 import { User } from '../../db/entities/User';
+import { Calendar } from '../../db/entities/Calendar';
 import { IDate } from '../../types/IDate';
+import { Todo } from '../../db/entities/Todo';
+import { Review } from '../../db/entities/Review';
+import review from './review';
 
 export default async (req: Request, res: Response) => {
   const userId = Number(req.query.userId);
-  const date = JSON.parse(req.query.date as string) as IDate;
+  const dateString = req.query.date as string;
 
-  const todos: Array<any> = [];
-  const reviews: Array<any> = [];
+  const _myCalendars = await getRepository(Calendar)
+    .createQueryBuilder('calendar')
+    .leftJoinAndSelect('calendar.todos', 'todos')
+    .leftJoinAndSelect('calendar.reviews', 'reviews')
+    .where('calendar.owner= :owner', { owner: userId })
+    .getMany();
 
-  // await getRepository(User)
-  //   .createQueryBuilder('user')
-  //   .leftJoinAndSelect('user.todos', 'todo')
-  //   .where('user.id = :id', { id: userId })
-  //   .getMany()
-  //   .then((result) => {
-  //     if (result !== undefined) {
-  //       for (const element of result[0].todos) {
-  //         const currentDay = JSON.parse(element.scheduleTime) as IDate;
-  //         if (
-  //           currentDay.year === date.year &&
-  //           currentDay.month === date.month &&
-  //           currentDay.day === date.day
-  //         ) {
-  //           todos.push(element);
-  //         }
-  //       }
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     res.status(401).send(error);
-  //   });
+  if (_myCalendars.length > 0) {
+    for await (const element of _myCalendars) {
+      const todos: Array<Todo> = [];
+      const reviews: Array<Review> = [];
 
-  // await getRepository(User)
-  //   .createQueryBuilder('user')
-  //   .leftJoinAndSelect('user.reviews', 'review')
-  //   .where('user.id = :id', { id: userId })
-  //   .getMany()
-  //   .then((result) => {
-  //     if (result !== undefined) {
-  //       for (const element of result[0].reviews) {
-  //         const currentDay = JSON.parse(element.scheduleTime) as IDate;
-  //         if (
-  //           currentDay.year === date.year &&
-  //           currentDay.month === date.month &&
-  //           currentDay.day === date.day
-  //         ) {
-  //           reviews.push(element);
-  //         }
-  //       }
-  //     }
-  //   })
-  //   .catch((error) => {
-  //     res.status(401).send(error);
-  //   });
+      element.todos.forEach((e) => {
+        console.log(e.scheduleDate, dateString);
+        if (e.scheduleDate === dateString) {
+          todos.push(e);
+        }
+      });
+      element.reviews.forEach((e) => {
+        if (e.scheduleDate === dateString) {
+          reviews.push(e);
+        }
+      });
 
-  return res.status(200).json({
-    todos,
-    reviews,
-  });
+      element.todos = todos;
+      element.reviews = reviews;
+    }
+    console.log(_myCalendars);
+    return res.status(200).json({
+      myCalendars: _myCalendars,
+    });
+  } else {
+    return res.status(401).send('캘린더 없음');
+  }
 
   return res.status(400);
 };
