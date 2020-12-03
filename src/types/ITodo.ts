@@ -1,5 +1,5 @@
 export interface ITodo {
   title: string;
-  scheduleTime: string;
+  scheduleDate: string;
   calendarId: number;
 }

@@ -21,7 +21,7 @@ export class Todo extends BaseEntity {
   title!: string;
 
   @Column()
-  scheduleTime!: string;
+  scheduleDate!: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;

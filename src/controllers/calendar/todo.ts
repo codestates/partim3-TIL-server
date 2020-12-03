@@ -4,7 +4,7 @@ import { ITodo } from '../../types/ITodo';
 import { Todo } from '../../db/entities/Todo';
 
 export default async (req: Request, res: Response) => {
-  const { title, scheduleTime, calendarId } = req.body as ITodo;
+  const { title, scheduleDate, calendarId } = req.body as ITodo;
 
   await getConnection()
     .createQueryBuilder()
@@ -12,7 +12,7 @@ export default async (req: Request, res: Response) => {
     .into(Todo)
     .values({
       title,
-      scheduleTime,
+      scheduleDate,
       calendar: calendarId,
     })
     .execute()

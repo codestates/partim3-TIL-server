@@ -7,18 +7,17 @@ import { IUser } from '../../types/IUser';
 import { User } from '../../db/entities/User';
 
 export default async (req: Request, res: Response) => {
-  const { id } = req.body as IUser;
-  const { name, color } = req.body as ICalendar;
+  const { userId, name, color } = req.body as ICalendar;
 
   const user = await getRepository(User)
     .createQueryBuilder('user')
-    .where('user.id= :id', { id })
+    .where('user.id= :id', { id: userId })
     .getOne();
 
   const myCalendars = await getRepository(User)
     .createQueryBuilder('user')
     .leftJoinAndSelect('user.myCalendars', 'myCalendars')
-    .where('user.id= :id', { id })
+    .where('user.id= :id', { id: userId })
     .getMany();
 
   if (myCalendars[0]) {
@@ -36,7 +35,7 @@ export default async (req: Request, res: Response) => {
     .values({
       name,
       color,
-      owner: id,
+      owner: userId,
     })
     .execute();
 
@@ -50,7 +49,7 @@ export default async (req: Request, res: Response) => {
       auth: true,
       ownerNickname: user?.nickname,
       calendar: calendar.identifiers[0].id as number,
-      owner: id,
+      owner: userId,
     })
     .execute()
     .then(() => {
