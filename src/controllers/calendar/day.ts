@@ -42,6 +42,7 @@ export default async (req: Request, res: Response) => {
     console.log(_myCalendars);
     return res.status(200).json({
       myCalendars: _myCalendars,
+      shareCalendars: [],
     });
   } else {
     return res.status(401).send('캘린더 없음');
