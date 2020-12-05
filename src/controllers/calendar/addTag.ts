@@ -5,7 +5,7 @@ import { User } from '../../db/entities/User';
 import { ITag } from '../../types/ITag';
 
 export default async (req: Request, res: Response) => {
-  const { userId, tagName, tagColor } = req.body as ITag;
+  const { userId, tagName, tagColor, description } = req.body as ITag;
 
   const myTags = await getRepository(User)
     .createQueryBuilder('user')
@@ -30,6 +30,7 @@ export default async (req: Request, res: Response) => {
     .values({
       tagName,
       tagColor,
+      description,
       user: userId,
     })
     .execute()
