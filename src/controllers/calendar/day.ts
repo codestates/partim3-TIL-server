@@ -22,7 +22,6 @@ export default async (req: Request, res: Response) => {
       const reviews: Array<Review> = [];
 
       element.todos.forEach((e) => {
-        console.log(e.scheduleDate, dateString);
         if (e.scheduleDate === dateString) {
           todos.push(e);
         }
@@ -36,7 +35,7 @@ export default async (req: Request, res: Response) => {
       element.todos = todos;
       element.reviews = reviews;
     }
-    console.log(_myCalendars);
+
     return res.status(200).json({
       myCalendars: _myCalendars,
       shareCalendars: [],
