@@ -18,7 +18,7 @@ export default async (req: Request, res: Response) => {
   if (myTags[0]) {
     for await (const element of myTags[0].tags) {
       if (element.tagName === tagName) {
-        return res.status(401).send('이미 있는 태그 이름');
+        return res.status(409).send('이미 있는 태그 이름');
       }
     }
   }
