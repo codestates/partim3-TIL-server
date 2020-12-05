@@ -29,7 +29,7 @@ export default async (req: Request, res: Response) => {
   }
 
   if (_userEmail === undefined && _userNickname === undefined) {
-    await getConnection()
+    const result = await getConnection()
       .createQueryBuilder()
       .insert()
       .into(User)
@@ -40,7 +40,9 @@ export default async (req: Request, res: Response) => {
       })
       .execute();
 
-    return res.status(201).send('회원 가입 완료');
+    return res
+      .status(201)
+      .json({ userId: result.generatedMaps[0].id as number });
   }
 
   return res.status(400);

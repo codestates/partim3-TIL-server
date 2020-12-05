@@ -17,10 +17,10 @@ export default async (req: Request, res: Response) => {
     })
     .execute()
     .then(() => {
-      return res.status(200).send('Todo 생성 완료');
+      return res.status(201).send('Todo 생성 완료');
     })
     .catch((error) => {
-      return res.status(401).send(error);
+      return res.status(409).send(error);
     });
   return res.status(400);
 };
