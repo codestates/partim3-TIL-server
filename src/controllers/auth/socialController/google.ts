@@ -51,7 +51,7 @@ export default async (req: Request, res: Response) => {
         .then((result) => {
           return res.status(201).json({
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            id: result.generatedMaps[0].id,
+            userId: result.generatedMaps[0].id,
             nickname,
             token,
           });
@@ -76,7 +76,7 @@ export default async (req: Request, res: Response) => {
         .getOne()
         .then((result) => {
           return res.status(201).json({
-            id: result?.id,
+            userId: result?.id,
             nickname: result?.nickname,
             token: result?.token,
           });
