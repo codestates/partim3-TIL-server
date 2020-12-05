@@ -18,7 +18,7 @@ export default async (req: Request, res: Response) => {
   if (myTags[0]) {
     for await (const element of myTags[0].tags) {
       if (element.tagName === tagName) {
-        return res.status(401).send('이미 있는 태그 이름');
+        return res.status(409).send('이미 있는 태그 이름');
       }
     }
   }
@@ -34,10 +34,10 @@ export default async (req: Request, res: Response) => {
     })
     .execute()
     .then(() => {
-      return res.status(200).send('태그 생성 완료');
+      return res.status(201).send('태그 생성 완료');
     })
     .catch((error) => {
-      return res.status(401).send(error);
+      return res.status(409).send(error);
     });
 
   return res.status(400);

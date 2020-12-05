@@ -5,14 +5,31 @@ import { IUser } from '../../types/IUser';
 
 export default async (req: Request, res: Response) => {
   const { email, password, nickname } = req.body as IUser;
-  const user = await getRepository(User)
+
+  const _userEmail = await getRepository(User)
     .createQueryBuilder('user')
     .where('user.email= :email', { email })
     .getOne();
 
-  // 닉네임 중복  구현 필요
-  if (user === undefined) {
-    await getConnection()
+  const _userNickname = await getRepository(User)
+    .createQueryBuilder('user')
+    .where('user.nickname= :nickname', { nickname })
+    .getOne();
+
+  if (_userNickname !== undefined) {
+    if (_userNickname.nickname === nickname) {
+      return res.status(409).send('닉네임 중복');
+    }
+  }
+
+  if (_userEmail !== undefined) {
+    if (_userEmail.email === email) {
+      return res.status(409).send('가입되어 있는 이메일');
+    }
+  }
+
+  if (_userEmail === undefined && _userNickname === undefined) {
+    const result = await getConnection()
       .createQueryBuilder()
       .insert()
       .into(User)
@@ -23,11 +40,10 @@ export default async (req: Request, res: Response) => {
       })
       .execute();
 
-    return res.status(200).send('회원 가입 완료');
-  } else {
-    if (user.email === email) {
-      return res.status(409).send('가입되어 있는 이메일');
-    }
+    return res
+      .status(201)
+      .json({ userId: result.generatedMaps[0].id as number });
   }
+
   return res.status(400);
 };

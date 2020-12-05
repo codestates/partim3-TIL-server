@@ -45,7 +45,7 @@ export default async (req: Request, res: Response) => {
       shareCalendars: [],
     });
   } else {
-    return res.status(401).send('캘린더 없음');
+    return res.status(409).send('캘린더 없음');
   }
 
   return res.status(400);

@@ -13,7 +13,7 @@ export default async (req: Request, res: Response) => {
     .where('id = :id', { id })
     .execute()
     .then(() => {
-      return res.status(200).send('토큰 삭제 완료');
+      return res.status(200).send('로그아웃 성공');
     });
 
   return res.status(400);

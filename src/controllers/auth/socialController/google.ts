@@ -49,7 +49,7 @@ export default async (req: Request, res: Response) => {
   //       })
   //       .execute()
   //       .then((result) => {
-  //         return res.status(200).json({
+  //         return res.status(201).json({
   //           id: result.generatedMaps[0].id,
   //           nickname,
   //           token,
@@ -74,7 +74,7 @@ export default async (req: Request, res: Response) => {
   //       .where('user.socialId= :socialId', { socialId })
   //       .getOne()
   //       .then((result) => {
-  //         return res.status(200).json({
+  //         return res.status(201).json({
   //           id: result?.id,
   //           nickname: result?.nickname,
   //           token: result?.token,
