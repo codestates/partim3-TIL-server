@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Request, Response } from 'express';
-import { Brackets, getRepository } from 'typeorm';
-import { User } from '../../db/entities/User';
+import { getRepository } from 'typeorm';
 import { Calendar } from '../../db/entities/Calendar';
-import { IDate } from '../../types/IDate';
 import { Todo } from '../../db/entities/Todo';
 import { Review } from '../../db/entities/Review';
-import review from './review';
 
 export default async (req: Request, res: Response) => {
   const userId = Number(req.query.userId);

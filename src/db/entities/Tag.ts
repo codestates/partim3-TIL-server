@@ -24,6 +24,9 @@ export class Tag extends BaseEntity {
   @Column()
   tagColor!: string;
 
+  @Column()
+  description!: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
