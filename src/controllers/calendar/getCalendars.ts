@@ -11,7 +11,7 @@ export default async (req: Request, res: Response) => {
     .where('user.id= :id', { id: userId })
     .getMany()
     .catch((error) => {
-      res.status(401).send(error);
+      res.status(409).send(error);
     });
 
   if (_myCalendars) {
