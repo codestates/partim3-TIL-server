@@ -1,0 +1,52 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { Request, Response } from 'express';
+import { Brackets, getRepository } from 'typeorm';
+import { User } from '../../db/entities/User';
+import { Calendar } from '../../db/entities/Calendar';
+import { IDate } from '../../types/IDate';
+import { Todo } from '../../db/entities/Todo';
+import { Review } from '../../db/entities/Review';
+import review from './review';
+
+export default async (req: Request, res: Response) => {
+  const userId = Number(req.query.userId);
+  const dateString = req.query.date as string;
+
+  const _myCalendars = await getRepository(Calendar)
+    .createQueryBuilder('calendar')
+    .leftJoinAndSelect('calendar.todos', 'todos')
+    .leftJoinAndSelect('calendar.reviews', 'reviews')
+    .where('calendar.owner= :owner', { owner: userId })
+    .getMany();
+
+  if (_myCalendars.length > 0) {
+    for await (const element of _myCalendars) {
+      const todos: Array<Todo> = [];
+      const reviews: Array<Review> = [];
+
+      element.todos.forEach((e) => {
+        console.log(e.scheduleDate, dateString);
+        if (e.scheduleDate === dateString) {
+          todos.push(e);
+        }
+      });
+      element.reviews.forEach((e) => {
+        if (e.scheduleDate === dateString) {
+          reviews.push(e);
+        }
+      });
+
+      element.todos = todos;
+      element.reviews = reviews;
+    }
+    console.log(_myCalendars);
+    return res.status(200).json({
+      myCalendars: _myCalendars,
+      shareCalendars: [],
+    });
+  } else {
+    return res.status(401).send('캘린더 없음');
+  }
+
+  return res.status(400);
+};
