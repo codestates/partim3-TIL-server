@@ -32,7 +32,7 @@ export default async (req: Request, res: Response) => {
       .execute();
 
     return res.status(200).json({
-      id: user.id,
+      userId: user.id,
       nickname: user.nickname,
       token,
     });

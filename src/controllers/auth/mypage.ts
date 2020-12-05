@@ -4,11 +4,11 @@ import { User } from '../../db/entities/User';
 import { IUser } from '../../types/IUser';
 
 export default async (req: Request, res: Response) => {
-  const { id, nickname, password, newPassword } = req.body as IUser;
+  const { userId, nickname, password, newPassword } = req.body as IUser;
 
   const user = await getRepository(User)
     .createQueryBuilder('user')
-    .where('user.id= :id', { id })
+    .where('user.id= :id', { id: userId })
     .getOne();
 
   if (user !== undefined) {
@@ -20,7 +20,7 @@ export default async (req: Request, res: Response) => {
           .createQueryBuilder()
           .update(User)
           .set({ nickname })
-          .where('id = :id', { id })
+          .where('id = :id', { id: userId })
           .execute();
 
         return res.status(200).send('닉네임 변경 완료');
@@ -31,7 +31,7 @@ export default async (req: Request, res: Response) => {
           .createQueryBuilder()
           .update(User)
           .set({ password: newPassword })
-          .where('id = :id', { id })
+          .where('id = :id', { id: userId })
           .execute();
 
         return res.status(200).send('비밀번호 변경 완료');
@@ -40,7 +40,7 @@ export default async (req: Request, res: Response) => {
           .createQueryBuilder()
           .update(User)
           .set({ password: newPassword, nickname })
-          .where('id = :id', { id })
+          .where('id = :id', { id: userId })
           .execute();
 
         return res.status(200).send('닉네임, 비밀번호 변경 완료');
