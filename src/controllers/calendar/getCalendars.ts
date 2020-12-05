@@ -18,6 +18,7 @@ export default async (req: Request, res: Response) => {
     if (_myCalendars[0]) {
       return res.status(200).json({
         myCalendars: _myCalendars[0].myCalendars,
+        shareCalendars: [],
       });
     }
   }
