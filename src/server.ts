@@ -36,4 +36,8 @@ void dbConnection.connection();
 app.use('/users', authRouter);
 app.use('/calendar', calendarRouter);
 
+app.get('/', (req, res) => {
+  res.send('hello TIL');
+});
+
 export default app;
