@@ -6,12 +6,6 @@ export default (req: Request, res: Response) => {
   const { oauthType } = req.body as User;
 
   switch (oauthType) {
-    case 'github':
-      void socialController.github(req, res);
-      break;
-    case 'kakao':
-      void socialController.kakao(req, res);
-      break;
     case 'google':
       void socialController.google(req, res);
       break;
