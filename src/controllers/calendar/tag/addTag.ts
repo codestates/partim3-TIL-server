@@ -1,4 +1,3 @@
-import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from 'constants';
 import { Request, Response } from 'express';
 import { getConnection, getRepository } from 'typeorm';
 import { Tag } from '../../../db/entities/Tag';
