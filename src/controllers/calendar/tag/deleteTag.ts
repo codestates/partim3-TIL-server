@@ -35,7 +35,7 @@ export default async (req: Request, res: Response) => {
     if (result.affected) {
       return res.status(200).send('태그 삭제 완료');
     } else {
-      return res.status(409).send('없는 태그 Id');
+      return res.status(409).send('태그 삭제 오류');
     }
   }
 
