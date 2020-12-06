@@ -14,7 +14,6 @@ export default async (req: Request, res: Response) => {
       res.status(409).send(error);
     });
 
-  console.log(_myTags);
   if (_myTags) {
     if (_myTags[0]) {
       return res.status(200).json({
