@@ -1,5 +1,6 @@
 export interface IUser {
   userId: number;
+  calendarId: number;
   id: number;
   email: string;
   password: string;

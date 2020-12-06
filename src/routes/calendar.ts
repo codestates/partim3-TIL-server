@@ -9,7 +9,9 @@ router.post('/addcalendar', calendarController.addCalendar);
 router.post('/addtag', calendarController.addTag);
 
 router.put('/updatetag', calendarController.updateTag);
+
 router.delete('/deletetag', calendarController.deleteTag);
+router.delete('/deletecalendar', calendarController.deleteCalendar);
 
 router.get('/day', calendarController.day);
 router.get('/calendars', calendarController.getCalendars);
