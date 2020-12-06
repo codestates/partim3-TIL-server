@@ -1,3 +1,4 @@
+import { SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION } from 'constants';
 import { Request, Response } from 'express';
 import { getConnection, getRepository } from 'typeorm';
 import { Tag } from '../../../db/entities/Tag';
@@ -13,8 +14,6 @@ export default async (req: Request, res: Response) => {
     .where('user.id= :id', { id: userId })
     .getMany();
 
-  console.log(myTags[0]);
-
   if (myTags[0]) {
     for await (const element of myTags[0].tags) {
       if (element.tagName === tagName) {
@@ -23,7 +22,7 @@ export default async (req: Request, res: Response) => {
     }
   }
 
-  await getConnection()
+  const result = await getConnection()
     .createQueryBuilder()
     .insert()
     .into(Tag)
@@ -33,13 +32,13 @@ export default async (req: Request, res: Response) => {
       description,
       user: userId,
     })
-    .execute()
-    .then(() => {
-      return res.status(201).send('태그 생성 완료');
-    })
-    .catch((error) => {
-      return res.status(409).send(error);
-    });
+    .execute();
+
+  if (result === undefined) {
+    return res.status(409).send(result);
+  } else {
+    return res.status(201).send('태그 생성 완료');
+  }
 
   return res.status(400);
 };
