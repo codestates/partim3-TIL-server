@@ -6,7 +6,7 @@ EXPRESS를 이용한 프로젝트 TIL 서버 코드
 
 1. npm install
 2. npm install -g typeorm
-3. env 폴더에 development.env 생성 후
+3. env 폴더생성 및 development.env생성
 4. npm run dev 로 테스트
 
 # 배포 환경 세팅
@@ -14,7 +14,7 @@ EXPRESS를 이용한 프로젝트 TIL 서버 코드
 1. npm install
 2. npm install -g typeorm
 3. npm install -g pm2
-4. env 폴더에 production.env 생성 후
+4. env 폴더생성 및 production.env 생성
 5. npm run pm2:start 으로 시작
 6. npm run pm2:stop 으로 중지
 
