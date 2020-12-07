@@ -40,7 +40,6 @@ export class CalendarAuthority extends BaseEntity {
     () => UserCalendarAuthority,
     (userCalendarAuthority) => userCalendarAuthority.calenderAuthority
   )
-  @JoinColumn({ name: 'userId' })
   userAuthorities!: UserCalendarAuthority[];
 
   @ManyToOne(() => User, (user) => user.myCalendarAuthorities)
