@@ -5,23 +5,25 @@ import { User } from '../../../db/entities/User';
 export default async (req: Request, res: Response) => {
   const userId = Number(req.query.userId);
 
-  const _myCalendars = await getRepository(User)
-    .createQueryBuilder('user')
-    .leftJoinAndSelect('user.myCalendars', 'myCalendars')
-    .where('user.id= :id', { id: userId })
-    .getMany()
-    .catch((error) => {
-      res.status(409).send(error);
-    });
+  try {
+    const _myCalendars = await getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.myCalendars', 'myCalendars')
+      .where('user.id= :id', { id: userId })
+      .getOne();
 
-  if (_myCalendars) {
-    if (_myCalendars[0]) {
+    if (_myCalendars) {
       return res.status(200).json({
-        myCalendars: _myCalendars[0].myCalendars,
+        myCalendars: _myCalendars.myCalendars,
+        shareCalendars: [],
+      });
+    } else {
+      return res.status(200).json({
+        myCalendars: [],
         shareCalendars: [],
       });
     }
+  } catch (error) {
+    return res.status(400).send(error);
   }
-
-  return res.status(400);
 };
