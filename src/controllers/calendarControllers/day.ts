@@ -11,7 +11,7 @@ export default async (req: Request, res: Response) => {
   const dateString = req.query.date as string;
 
   const myCalendars = await getRepository(User)
-    .createQueryBuilder('calendar')
+    .createQueryBuilder('user')
     .leftJoinAndSelect('user.myCalendars', 'myCalendars')
     .where('user.id= :id', { id: userId })
     .getOne();
