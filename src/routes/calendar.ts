@@ -9,7 +9,7 @@ router.post('/addcalendar', calendarController.addCalendar);
 router.post('/addtag', calendarController.addTag);
 
 router.put('/updatetag', calendarController.updateTag);
-router.put('/updateCalender', calendarController.updateCalendar);
+router.put('/updatecalender', calendarController.updateCalendar);
 
 router.delete('/deletetag', calendarController.deleteTag);
 router.delete('/deletecalendar', calendarController.deleteCalendar);
