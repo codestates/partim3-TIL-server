@@ -1,4 +1,11 @@
-import { Entity, BaseEntity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  BaseEntity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+  JoinTable,
+} from 'typeorm';
 import { User } from './User';
 import { CalendarAuthority } from './CalendarAuthority';
 
@@ -12,6 +19,7 @@ export class UserCalendarAuthority extends BaseEntity {
     onDelete: 'CASCADE',
     nullable: false,
   })
+  @JoinTable()
   user!: User;
 
   @ManyToOne(
@@ -19,5 +27,6 @@ export class UserCalendarAuthority extends BaseEntity {
     (calendarAuthority) => calendarAuthority.userAuthorities,
     { primary: true, onDelete: 'CASCADE', nullable: false }
   )
+  @JoinTable()
   calenderAuthority!: CalendarAuthority;
 }
