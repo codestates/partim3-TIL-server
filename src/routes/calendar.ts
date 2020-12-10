@@ -3,14 +3,15 @@ import calendarController from '../controllers/calendarControllers';
 
 const router = express.Router();
 
-router.post('/todo', calendarController.todo);
-router.post('/review', calendarController.review);
-router.post('/addcalendar', calendarController.addCalendar);
+router.post('/todo', calendarController.addTodo);
+router.post('/review', calendarController.addReview);
 router.post('/addtag', calendarController.addTag);
+router.post('/addcalendar', calendarController.addCalendar);
 
 router.put('/updatetag', calendarController.updateTag);
 router.put('/updateCalender', calendarController.updateCalendar);
 
+router.delete('/deletetodo', calendarController.deleteTodo);
 router.delete('/deletetag', calendarController.deleteTag);
 router.delete('/deletecalendar', calendarController.deleteCalendar);
 
