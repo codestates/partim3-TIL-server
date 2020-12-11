@@ -7,37 +7,36 @@ import { ITag } from '../../../types/ITag';
 export default async (req: Request, res: Response) => {
   const { userId, tagName, tagColor, description } = req.body as ITag;
 
-  const myTags = await getRepository(User)
-    .createQueryBuilder('user')
-    .leftJoinAndSelect('user.tags', 'tags')
-    .where('user.id= :id', { id: userId })
-    .getMany();
+  try {
+    const _myTags = await getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.tags', 'tags')
+      .where('user.id= :userId', { userId })
+      .andWhere('tags.tagName = :tagName', { tagName })
+      .getOne();
 
-  if (myTags[0]) {
-    for await (const element of myTags[0].tags) {
-      if (element.tagName === tagName) {
-        return res.status(409).send('이미 있는 태그 이름');
-      }
+    if (_myTags) {
+      return res.status(400).send('이미 있는 태그 이름');
     }
+  } catch (error) {
+    return res.status(400).send(error);
   }
 
-  const result = await getConnection()
-    .createQueryBuilder()
-    .insert()
-    .into(Tag)
-    .values({
-      tagName,
-      tagColor,
-      description,
-      user: userId,
-    })
-    .execute();
+  try {
+    await getConnection()
+      .createQueryBuilder()
+      .insert()
+      .into(Tag)
+      .values({
+        tagName,
+        tagColor,
+        description,
+        user: userId,
+      })
+      .execute();
 
-  if (result === undefined) {
-    return res.status(409).send(result);
-  } else {
     return res.status(201).send('태그 생성 완료');
+  } catch (error) {
+    return res.status(400).send(error);
   }
-
-  return res.status(400);
 };

@@ -16,7 +16,9 @@ export default async (req: Request, res: Response) => {
       .getOne();
 
     if (!_myCalendars) {
-      return res.status(400).send('유저가 가지고 있지 않은 캘린더');
+      return res
+        .status(400)
+        .send('유저 정보 없음 또는 가지고 있지 않은 캘린더');
     }
   } catch (error) {
     return res.status(400).send(error);

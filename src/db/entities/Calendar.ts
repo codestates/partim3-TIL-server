@@ -47,6 +47,5 @@ export class Calendar extends BaseEntity {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
   owner!: number;
 }

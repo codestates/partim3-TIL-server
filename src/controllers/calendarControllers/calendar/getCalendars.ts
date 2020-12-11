@@ -18,10 +18,7 @@ export default async (req: Request, res: Response) => {
         shareCalendars: [],
       });
     } else {
-      return res.status(200).json({
-        myCalendars: [],
-        shareCalendars: [],
-      });
+      return res.status(400).send('유저 정보 없음');
     }
   } catch (error) {
     return res.status(400).send(error);

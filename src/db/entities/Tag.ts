@@ -37,7 +37,6 @@ export class Tag extends BaseEntity {
     onDelete: 'CASCADE',
     nullable: false,
   })
-  @JoinColumn()
   user!: number;
 
   @OneToMany(() => TodoTag, (todoTag) => todoTag.tag)
