@@ -7,37 +7,30 @@ import { ITag } from '../../../types/ITag';
 export default async (req: Request, res: Response) => {
   const { userId, tagId } = req.body as ITag;
 
-  const _myTags = await getRepository(User)
-    .createQueryBuilder('user')
-    .leftJoinAndSelect('user.tags', 'tags')
-    .where('user.id= :id', { id: userId })
-    .getMany();
+  try {
+    const _myTags = await getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.tags', 'tags')
+      .where('user.id= :userId', { userId })
+      .andWhere('tags.id = :tagId', { tagId })
+      .getOne();
 
-  if (_myTags[0]) {
-    let isTag = false as boolean;
-    for await (const element of _myTags[0].tags) {
-      if (element.id === tagId) {
-        isTag = true;
-      }
+    if (!_myTags) {
+      return res.status(400).send('유저 정보 없음 또는 가지고 있지 않은 태그');
     }
-    if (!isTag) {
-      return res.status(409).send('유저가 가지고 있지 않은 태그');
-    }
+  } catch (error) {
+    return res.status(400).send(error);
   }
 
-  const result = await getRepository(Tag)
-    .createQueryBuilder('tag')
-    .delete()
-    .where('tag.id= :id', { id: tagId })
-    .execute();
+  try {
+    await getRepository(Tag)
+      .createQueryBuilder('tag')
+      .delete()
+      .where('tag.id= :tagId', { tagId })
+      .execute();
 
-  if (result) {
-    if (result.affected) {
-      return res.status(200).send('태그 삭제 완료');
-    } else {
-      return res.status(409).send('태그 삭제 오류');
-    }
+    return res.status(200).send('태그 삭제 완료');
+  } catch (error) {
+    return res.status(400).send(error);
   }
-
-  return res.status(400);
 };

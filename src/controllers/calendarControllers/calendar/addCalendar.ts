@@ -13,11 +13,11 @@ export default async (req: Request, res: Response) => {
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.myCalendars', 'myCalendars')
       .where('user.id= :userId', { userId })
-      .andWhere('myCalendars.name = :name', { name })
+      .andWhere('myCalendars.name = :name', { name: 'qwer' })
       .getOne();
 
     if (_myCalendars) {
-      return res.status(409).send('이미 있는 캘린더 이름');
+      return res.status(400).send('이미 있는 캘린더 이름');
     }
   } catch (error) {
     return res.status(400).send(error);

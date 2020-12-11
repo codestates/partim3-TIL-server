@@ -16,21 +16,23 @@ export default async (req: Request, res: Response) => {
       .getOne();
 
     if (!_myCalendars) {
-      return res.status(400).send('유저가 가지고 있지 않은 캘린더');
+      return res
+        .status(400)
+        .send('유저 정보 없음 또는 가지고 있지 않은 캘린더');
     }
   } catch (error) {
     return res.status(400).send(error);
   }
 
-  // try {
-  //   await getRepository(Calendar)
-  //     .createQueryBuilder('calendar')
-  //     .delete()
-  //     .where('calendar.id= :id', { id: calendarId })
-  //     .execute();
+  try {
+    await getRepository(Calendar)
+      .createQueryBuilder('calendar')
+      .delete()
+      .where('calendar.id= :id', { id: calendarId })
+      .execute();
 
-  //   return res.status(200).send('캘린더 삭제 완료');
-  // } catch (error) {
-  //   return res.status(400).send('캘린더 삭제 오류');
-  // }
+    return res.status(200).send('캘린더 삭제 완료');
+  } catch (error) {
+    return res.status(400).send('캘린더 삭제 오류');
+  }
 };
