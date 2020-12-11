@@ -12,7 +12,7 @@ export default async (req: Request, res: Response) => {
     const _myCalendars = await getRepository(User)
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.myCalendars', 'myCalendars')
-      .where('user.id= :id', { id: userId })
+      .where('user.id= :userId', { userId })
       .andWhere('myCalendars.name = :name', { name })
       .getOne();
 

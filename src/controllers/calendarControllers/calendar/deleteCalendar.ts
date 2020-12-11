@@ -11,8 +11,8 @@ export default async (req: Request, res: Response) => {
     const _myCalendars = await getRepository(User)
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.myCalendars', 'myCalendars')
-      .where('user.id= :id', { id: userId })
-      .orWhere('myCalendars.id = :id', { id: calendarId })
+      .where('user.id= :userId', { userId })
+      .andWhere('myCalendars.id = :calendarId', { calendarId })
       .getOne();
 
     if (!_myCalendars) {
@@ -22,15 +22,15 @@ export default async (req: Request, res: Response) => {
     return res.status(400).send(error);
   }
 
-  try {
-    await getRepository(Calendar)
-      .createQueryBuilder('calendar')
-      .delete()
-      .where('calendar.id= :id', { id: calendarId })
-      .execute();
+  // try {
+  //   await getRepository(Calendar)
+  //     .createQueryBuilder('calendar')
+  //     .delete()
+  //     .where('calendar.id= :id', { id: calendarId })
+  //     .execute();
 
-    return res.status(200).send('캘린더 삭제 완료');
-  } catch (error) {
-    return res.status(400).send('캘린더 삭제 오류');
-  }
+  //   return res.status(200).send('캘린더 삭제 완료');
+  // } catch (error) {
+  //   return res.status(400).send('캘린더 삭제 오류');
+  // }
 };
