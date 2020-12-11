@@ -10,53 +10,34 @@ export default async (req: Request, res: Response) => {
   const userId = Number(req.query.userId);
   const dateString = req.query.date as string;
 
-  const myCalendars = await getRepository(User)
-    .createQueryBuilder('user')
-    .leftJoinAndSelect('user.myCalendars', 'myCalendars')
-    .where('user.id= :id', { id: userId })
-    .getOne();
+  try {
+    const myCalendars = await getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.myCalendars', 'myCalendars')
+      .leftJoinAndSelect(
+        'myCalendars.todos',
+        'todos',
+        'todos.scheduleDate = :dateString',
+        { dateString }
+      )
+      .leftJoinAndSelect(
+        'myCalendars.reviews',
+        'reviews',
+        'reviews.scheduleDate = :dateString',
+        { dateString }
+      )
+      .where('user.id = :userId', { userId })
+      .getOne();
 
-  if (!myCalendars) {
-    return res.status(200).json({
-      myCalendars: [],
-      shareCalendars: [],
-    });
-  }
-
-  const _myCalendars = await getRepository(Calendar)
-    .createQueryBuilder('calendar')
-    .leftJoinAndSelect('calendar.todos', 'todos')
-    .leftJoinAndSelect('calendar.reviews', 'reviews')
-    .where('calendar.owner= :owner', { owner: userId })
-    .getMany();
-
-  if (_myCalendars.length > 0) {
-    for await (const element of _myCalendars) {
-      const todos: Array<Todo> = [];
-      const reviews: Array<Review> = [];
-
-      element.todos.forEach((e) => {
-        if (e.scheduleDate === dateString) {
-          todos.push(e);
-        }
+    if (!myCalendars) {
+      return res.status(400).send('유저 정보 없음');
+    } else {
+      return res.status(200).json({
+        myCalendars: myCalendars.myCalendars,
+        shareCalendars: [],
       });
-      element.reviews.forEach((e) => {
-        if (e.scheduleDate === dateString) {
-          reviews.push(e);
-        }
-      });
-
-      element.todos = todos;
-      element.reviews = reviews;
     }
-
-    return res.status(200).json({
-      myCalendars: _myCalendars,
-      shareCalendars: [],
-    });
-  } else {
-    return res.status(409).send('캘린더 없음');
+  } catch (error) {
+    return res.status(400).send(error);
   }
-
-  return res.status(400);
 };
