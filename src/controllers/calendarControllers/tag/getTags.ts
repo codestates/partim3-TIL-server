@@ -6,6 +6,19 @@ export default async (req: Request, res: Response) => {
   const userId = Number(req.query.userId);
 
   try {
+    const _user = await getRepository(User)
+      .createQueryBuilder('user')
+      .where('user.id= :userId', { userId })
+      .getOne();
+
+    if (!_user) {
+      return res.status(400).send('유저 정보 없음');
+    }
+  } catch (error) {
+    return res.status(400).send(error);
+  }
+
+  try {
     const _myTags = await getRepository(User)
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.tags', 'tags')
