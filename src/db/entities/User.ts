@@ -6,11 +6,13 @@ import {
   UpdateDateColumn,
   BaseEntity,
   OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { UserCalendarAuthority } from './UserCalendarAuthority';
 import { CalendarAuthority } from './CalendarAuthority';
 import { Calendar } from './Calendar';
 import { Tag } from './Tag';
+import { Message } from './Message';
 
 @Entity()
 export class User extends BaseEntity {
@@ -70,4 +72,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Tag, (tag) => tag.user)
   tags!: Tag[];
+
+  @OneToMany(() => Message, (message) => message.user)
+  messages!: Message[];
 }

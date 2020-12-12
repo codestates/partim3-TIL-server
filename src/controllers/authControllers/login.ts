@@ -15,7 +15,7 @@ export default async (req: Request, res: Response) => {
       .getOne();
 
     if (!_user) {
-      return res.status(400).send('잘못된 이메일 또는 잘못된 비밀번호');
+      return res.status(401).send('잘못된 이메일 또는 잘못된 비밀번호');
     }
 
     // eslint-disable-next-line @typescript-eslint/await-thenable

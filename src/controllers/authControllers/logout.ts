@@ -27,7 +27,7 @@ export default async (req: Request, res: Response) => {
       .where('id = :userId', { userId })
       .execute();
 
-    return res.status(200).send('로그아웃 성공');
+    return res.status(200).send('로그아웃 완료');
   } catch (error) {
     return res.status(400).send(error);
   }

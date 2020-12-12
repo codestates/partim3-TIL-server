@@ -4,6 +4,7 @@ import morgan from 'morgan';
 
 import authRouter from './routes/auth';
 import calendarRouter from './routes/calendar';
+import messageRouter from './routes/user';
 
 import dbConnection from './utils/typeormConnection';
 
@@ -35,6 +36,7 @@ void dbConnection.connection();
 
 app.use('/users', authRouter);
 app.use('/calendar', calendarRouter);
+app.use('/user', messageRouter);
 
 app.get('/', (req, res) => {
   res.send('hello TIL');
