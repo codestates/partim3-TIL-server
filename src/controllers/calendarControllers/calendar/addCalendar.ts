@@ -13,7 +13,7 @@ export default async (req: Request, res: Response) => {
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.myCalendars', 'myCalendars')
       .where('user.id= :userId', { userId })
-      .andWhere('myCalendars.name = :name', { name: 'qwer' })
+      .andWhere('myCalendars.name = :name', { name })
       .getOne();
 
     if (_myCalendars) {
