@@ -7,6 +7,7 @@ router.post('/todo', calendarController.addTodo);
 router.post('/review', calendarController.addReview);
 router.post('/addtag', calendarController.addTag);
 router.post('/addcalendar', calendarController.addCalendar);
+router.post('/connectcalendar', calendarController.connectCalendar);
 
 router.put('/updatetag', calendarController.updateTag);
 router.put('/updatecalender', calendarController.updateCalendar);

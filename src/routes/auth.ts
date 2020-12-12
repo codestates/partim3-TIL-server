@@ -8,6 +8,4 @@ router.post('/login', authController.login);
 router.post('/logout', authController.logout);
 router.post('/social', authController.social);
 
-router.put('/updateuser', authController.updateUser);
-
 export default router;
