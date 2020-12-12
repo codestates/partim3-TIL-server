@@ -26,7 +26,7 @@ export default async (req: Request, res: Response) => {
   try {
     const _user = await getRepository(User)
       .createQueryBuilder('user')
-      .where('user.id= :id', { id: userId })
+      .where('user.id= :userId', { userId })
       .getOne();
 
     const calendar = await getConnection()
