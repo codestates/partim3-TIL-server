@@ -6,29 +6,28 @@ import { IUser } from '../../types/IUser';
 export default async (req: Request, res: Response) => {
   const { email, password, nickname } = req.body as IUser;
 
-  const _userEmail = await getRepository(User)
-    .createQueryBuilder('user')
-    .where('user.email= :email', { email })
-    .getOne();
+  try {
+    const _userEmail = await getRepository(User)
+      .createQueryBuilder('user')
+      .where('user.email= :email', { email })
+      .getOne();
 
-  const _userNickname = await getRepository(User)
-    .createQueryBuilder('user')
-    .where('user.nickname= :nickname', { nickname })
-    .getOne();
+    const _userNickname = await getRepository(User)
+      .createQueryBuilder('user')
+      .where('user.nickname= :nickname', { nickname })
+      .getOne();
 
-  if (_userNickname !== undefined) {
-    if (_userNickname.nickname === nickname) {
-      return res.status(409).send('닉네임 중복');
+    if (_userEmail) {
+      return res.status(400).send('가입되어 있는 이메일');
     }
+    if (_userNickname) {
+      return res.status(400).send('닉네임 중복');
+    }
+  } catch (error) {
+    return res.status(400).send(error);
   }
 
-  if (_userEmail !== undefined) {
-    if (_userEmail.email === email) {
-      return res.status(409).send('가입되어 있는 이메일');
-    }
-  }
-
-  if (_userEmail === undefined && _userNickname === undefined) {
+  try {
     const result = await getConnection()
       .createQueryBuilder()
       .insert()
@@ -43,7 +42,7 @@ export default async (req: Request, res: Response) => {
     return res
       .status(201)
       .json({ userId: result.generatedMaps[0].id as number });
+  } catch (error) {
+    return res.status(400).send(error);
   }
-
-  return res.status(400);
 };
