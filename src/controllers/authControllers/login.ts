@@ -7,14 +7,17 @@ import jwt from 'jsonwebtoken';
 export default async (req: Request, res: Response) => {
   const { email, password } = req.body as IUser;
 
-  const user = await getRepository(User)
-    .createQueryBuilder('user')
-    .where('user.email= :email', { email })
-    .getOne();
+  try {
+    const _user = await getRepository(User)
+      .createQueryBuilder('user')
+      .where('user.email= :email', { email })
+      .andWhere('user.password = :password', { password })
+      .getOne();
 
-  if (user === undefined) {
-    return res.status(401).send('회원 정보 없음');
-  } else if (user.email === email && user.password === password) {
+    if (!_user) {
+      return res.status(400).send('잘못된 이메일 또는 잘못된 비밀번호');
+    }
+
     // eslint-disable-next-line @typescript-eslint/await-thenable
     const token = await jwt.sign(
       {
@@ -32,11 +35,11 @@ export default async (req: Request, res: Response) => {
       .execute();
 
     return res.status(200).json({
-      userId: user.id,
-      nickname: user.nickname,
+      userId: _user.id,
+      nickname: _user.nickname,
       token,
     });
+  } catch (error) {
+    return res.status(400).send(error);
   }
-
-  return res.status(400);
 };
