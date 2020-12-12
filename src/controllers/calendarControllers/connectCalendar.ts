@@ -25,7 +25,7 @@ export default async (req: Request, res: Response) => {
     const authority = await getRepository(User)
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.userAuthorities', 'userAuthorities')
-      .getMany();
+      .getOne();
 
     console.log(authority);
 

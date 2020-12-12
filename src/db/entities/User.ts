@@ -6,8 +6,6 @@ import {
   UpdateDateColumn,
   BaseEntity,
   OneToMany,
-  OneToOne,
-  ManyToMany,
 } from 'typeorm';
 import { UserCalendarAuthority } from './UserCalendarAuthority';
 import { CalendarAuthority } from './CalendarAuthority';
