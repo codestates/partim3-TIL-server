@@ -10,6 +10,7 @@ import updateTodo from './todo/updateTodo';
 import deleteTag from './tag/deleteTag';
 import deleteCalendar from './calendar/deleteCalendar';
 import deleteTodo from './todo/deleteTodo';
+import deleteReview from './review/deleteReview';
 import updateCalendar from './calendar/updateCalendar';
 
 export default {
@@ -26,4 +27,5 @@ export default {
   deleteTag,
   deleteCalendar,
   deleteTodo,
+  deleteReview,
 };

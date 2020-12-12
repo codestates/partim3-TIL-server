@@ -15,6 +15,7 @@ router.put('/updatetodo', calendarController.updateTodo);
 router.delete('/deletetodo', calendarController.deleteTodo);
 router.delete('/deletetag', calendarController.deleteTag);
 router.delete('/deletecalendar', calendarController.deleteCalendar);
+router.delete('/deletereview', calendarController.deleteReview);
 
 router.get('/day', calendarController.day);
 router.get('/calendars', calendarController.getCalendars);
