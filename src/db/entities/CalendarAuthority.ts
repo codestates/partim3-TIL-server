@@ -8,6 +8,8 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { User } from './User';
 import { UserCalendarAuthority } from './UserCalendarAuthority';
@@ -40,16 +42,14 @@ export class CalendarAuthority extends BaseEntity {
     () => UserCalendarAuthority,
     (userCalendarAuthority) => userCalendarAuthority.calenderAuthority
   )
-  userAuthorities!: UserCalendarAuthority[];
+  authorityUsers!: UserCalendarAuthority[];
 
   @ManyToOne(() => User, (user) => user.myCalendarAuthorities)
-  @JoinColumn()
   owner!: number;
 
   @ManyToOne(() => Calendar, (calendar) => calendar.authorities, {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  @JoinColumn()
   calendar!: number;
 }
