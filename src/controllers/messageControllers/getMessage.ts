@@ -12,8 +12,6 @@ export default async (req: Request, res: Response) => {
       .where('user.id= :userId', { userId })
       .getOne();
 
-    console.log(_messages);
-
     if (_messages) {
       return res.status(200).json({
         myMessages: _messages.messages,
