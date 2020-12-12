@@ -7,7 +7,6 @@ import {
   BaseEntity,
   OneToMany,
   ManyToOne,
-  JoinColumn,
 } from 'typeorm';
 import { CalendarAuthority } from './CalendarAuthority';
 import { User } from './User';
