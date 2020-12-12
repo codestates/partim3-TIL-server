@@ -28,7 +28,7 @@ export default async (req: Request, res: Response) => {
     await getRepository(Calendar)
       .createQueryBuilder('calendar')
       .delete()
-      .where('calendar.id= :id', { id: calendarId })
+      .where('calendar.id= :calendarId', { calendarId })
       .execute();
 
     return res.status(200).send('캘린더 삭제 완료');

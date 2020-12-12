@@ -7,11 +7,12 @@ import getCalendars from './calendar/getCalendars';
 import getTags from './tag/getTags';
 import updateTag from './tag/updateTag';
 import updateTodo from './todo/updateTodo';
+import updateCalendar from './calendar/updateCalendar';
+import updateReview from './review/updateReview';
 import deleteTag from './tag/deleteTag';
 import deleteCalendar from './calendar/deleteCalendar';
 import deleteTodo from './todo/deleteTodo';
 import deleteReview from './review/deleteReview';
-import updateCalendar from './calendar/updateCalendar';
 
 export default {
   addTodo,
@@ -24,6 +25,7 @@ export default {
   updateTag,
   updateCalendar,
   updateTodo,
+  updateReview,
   deleteTag,
   deleteCalendar,
   deleteTodo,
