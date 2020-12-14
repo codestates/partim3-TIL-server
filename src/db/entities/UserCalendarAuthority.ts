@@ -1,27 +1,28 @@
-import {
-  Entity,
-  BaseEntity,
-  ManyToOne,
-  JoinColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Entity, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
 import { User } from './User';
 import { CalendarAuthority } from './CalendarAuthority';
 
 @Entity()
 export class UserCalendarAuthority extends BaseEntity {
-  @ManyToOne(() => User, (user) => user.userAuthorities, {
+  @PrimaryColumn()
+  userId!: number;
+
+  @PrimaryColumn()
+  calenderAuthorityId!: number;
+
+  @ManyToOne(() => User, (user) => user.userCalendarAuthorities, {
+    primary: true,
     onDelete: 'CASCADE',
     nullable: false,
   })
   @JoinColumn()
-  user!: number;
+  user!: User;
 
   @ManyToOne(
     () => CalendarAuthority,
-    (calendarAuthority) => calendarAuthority.authorityUsers,
-    { onDelete: 'CASCADE', nullable: false }
+    (calendarAuthority) => calendarAuthority.calendarAuthorityUsers,
+    { primary: true, onDelete: 'CASCADE', nullable: false }
   )
   @JoinColumn()
-  calenderAuthority!: number;
+  calenderAuthority!: CalendarAuthority;
 }

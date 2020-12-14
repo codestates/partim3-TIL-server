@@ -6,12 +6,15 @@ import {
   UpdateDateColumn,
   BaseEntity,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { UserCalendarAuthority } from './UserCalendarAuthority';
 import { CalendarAuthority } from './CalendarAuthority';
 import { Calendar } from './Calendar';
 import { Tag } from './Tag';
 import { Message } from './Message';
+import calendarControllers from '../../controllers/calendarControllers';
 
 @Entity()
 export class User extends BaseEntity {
@@ -58,7 +61,7 @@ export class User extends BaseEntity {
     () => UserCalendarAuthority,
     (userCalendarAuthority) => userCalendarAuthority.user
   )
-  userAuthorities!: UserCalendarAuthority[];
+  userCalendarAuthorities!: UserCalendarAuthority[];
 
   @OneToMany(
     () => CalendarAuthority,
@@ -74,4 +77,11 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Message, (message) => message.user)
   messages!: Message[];
+
+  @ManyToMany(
+    () => CalendarAuthority,
+    (calendarAuthority) => calendarAuthority.users
+  )
+  @JoinTable()
+  authorities!: CalendarAuthority[];
 }

@@ -42,7 +42,7 @@ export class CalendarAuthority extends BaseEntity {
     () => UserCalendarAuthority,
     (userCalendarAuthority) => userCalendarAuthority.calenderAuthority
   )
-  authorityUsers!: UserCalendarAuthority[];
+  calendarAuthorityUsers!: UserCalendarAuthority[];
 
   @ManyToOne(() => User, (user) => user.myCalendarAuthorities)
   owner!: number;
@@ -52,4 +52,7 @@ export class CalendarAuthority extends BaseEntity {
     onDelete: 'CASCADE',
   })
   calendar!: number;
+
+  @ManyToMany(() => User, (user) => user.authorities)
+  users!: User[];
 }
