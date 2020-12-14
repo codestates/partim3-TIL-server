@@ -3,7 +3,7 @@ import { User } from './User';
 import { CalendarAuthority } from './CalendarAuthority';
 
 @Entity()
-export class UserCalendarAuthority {
+export class UserCalendarAuthority extends BaseEntity {
   @PrimaryColumn()
   userId!: number;
 
@@ -13,7 +13,7 @@ export class UserCalendarAuthority {
   @ManyToOne(() => User, (user) => user.userCalendarAuthorities, {
     primary: true,
     onDelete: 'CASCADE',
-    nullable: true,
+    nullable: false,
   })
   @JoinColumn()
   user!: User;
@@ -21,7 +21,7 @@ export class UserCalendarAuthority {
   @ManyToOne(
     () => CalendarAuthority,
     (calendarAuthority) => calendarAuthority.calendarAuthorityUsers,
-    { primary: true, onDelete: 'CASCADE', nullable: true }
+    { primary: true, onDelete: 'CASCADE', nullable: false }
   )
   @JoinColumn()
   calenderAuthority!: CalendarAuthority;

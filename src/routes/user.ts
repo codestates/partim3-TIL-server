@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.post('/message', messageController.postMessage);
 
+router.get('/user', usercontroller.getUser);
+
 router.put('/updateuser', usercontroller.updateUser);
 
 router.get('/message', messageController.getMessage);

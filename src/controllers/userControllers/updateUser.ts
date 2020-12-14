@@ -4,7 +4,8 @@ import { User } from '../../db/entities/User';
 import { IUser } from '../../types/IUser';
 
 export default async (req: Request, res: Response) => {
-  const { userId, nickname, password, newPassword } = req.body as IUser;
+  const { userId, nickname, password } = req.body as IUser;
+  let { newPassword } = req.body as IUser;
 
   try {
     const _user = await getRepository(User)
@@ -21,6 +22,10 @@ export default async (req: Request, res: Response) => {
   }
 
   try {
+    if (newPassword === null) {
+      newPassword = password;
+    }
+
     await getConnection()
       .createQueryBuilder()
       .update(User)
