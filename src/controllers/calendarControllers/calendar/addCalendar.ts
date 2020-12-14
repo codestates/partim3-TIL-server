@@ -73,8 +73,8 @@ export default async (req: Request, res: Response) => {
       .insert()
       .into(UserCalendarAuthority)
       .values({
-        user: _user?.id,
-        calenderAuthority: _calendarAuthority.identifiers[0].id as number,
+        userId: _user?.id,
+        calenderAuthorityId: _calendarAuthority.identifiers[0].id as number,
       })
       .execute();
 
