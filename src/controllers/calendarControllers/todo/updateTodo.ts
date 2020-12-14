@@ -7,7 +7,7 @@ import { Calendar } from '../../../db/entities/Calendar';
 import { UserCalendarAuthority } from '../../../db/entities/UserCalendarAuthority';
 
 export default async (req: Request, res: Response) => {
-  const { userId, calendarId, title, todoId } = req.body as ITodo;
+  const { userId, calendarId, title, scheduleDate, todoId } = req.body as ITodo;
 
   try {
     const _myCalendars = await getRepository(User)
@@ -49,6 +49,7 @@ export default async (req: Request, res: Response) => {
       .update(Todo)
       .set({
         title,
+        scheduleDate,
       })
       .where('id = :todoId', { todoId })
       .execute();
