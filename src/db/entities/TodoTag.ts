@@ -1,19 +1,18 @@
-import { Entity, BaseEntity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, BaseEntity, ManyToOne } from 'typeorm';
 import { Tag } from './Tag';
 import { Todo } from './Todo';
 
 @Entity()
 export class TodoTag extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id!: number;
-
   @ManyToOne(() => Tag, (tag) => tag.todoTags, {
+    primary: true,
     onDelete: 'CASCADE',
     nullable: false,
   })
   tag!: number;
 
   @ManyToOne(() => Todo, (todo) => todo.todoTags, {
+    primary: true,
     onDelete: 'CASCADE',
     nullable: false,
   })

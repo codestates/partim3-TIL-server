@@ -9,7 +9,6 @@ export class UserCalendarAuthority extends BaseEntity {
     onDelete: 'CASCADE',
     nullable: false,
   })
-  @JoinColumn()
   user!: number;
 
   @ManyToOne(
@@ -17,6 +16,5 @@ export class UserCalendarAuthority extends BaseEntity {
     (calendarAuthority) => calendarAuthority.calendarAuthorityUsers,
     { primary: true, onDelete: 'CASCADE', nullable: false }
   )
-  @JoinColumn()
   calenderAuthority!: number;
 }
