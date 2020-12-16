@@ -52,7 +52,4 @@ export class CalendarAuthority extends BaseEntity {
     onDelete: 'CASCADE',
   })
   calendar!: number;
-
-  @ManyToMany(() => User, (user) => user.authorities)
-  users!: User[];
 }
