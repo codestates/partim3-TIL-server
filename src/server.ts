@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === 'development') {
 if (process.env.NODE_ENV === 'production') {
   app.use(
     cors({
-      origin: ['http://localhost:3000'],
+      origin: ['http://til-client.s3-website.ap-northeast-2.amazonaws.com'],
       credentials: true,
     })
   );
