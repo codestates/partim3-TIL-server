@@ -42,7 +42,6 @@ export class Review extends BaseEntity {
     onDelete: 'CASCADE',
     nullable: false,
   })
-  @JoinColumn()
   calendar!: number;
 
   @OneToMany(() => ReviewTag, (reviewTag) => reviewTag.review)

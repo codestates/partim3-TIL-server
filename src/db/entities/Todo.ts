@@ -33,7 +33,6 @@ export class Todo extends BaseEntity {
     onDelete: 'CASCADE',
     nullable: false,
   })
-  @JoinColumn()
   calendar!: number;
 
   @OneToMany(() => TodoTag, (todoTag) => todoTag.todo)

@@ -13,7 +13,7 @@ import deleteTag from './tag/deleteTag';
 import deleteCalendar from './calendar/deleteCalendar';
 import deleteTodo from './todo/deleteTodo';
 import deleteReview from './review/deleteReview';
-import connectCalendar from './connectCalendar';
+import connectCalendarAuthority from './connectCalendarAuthority';
 
 export default {
   addTodo,
@@ -31,5 +31,5 @@ export default {
   deleteCalendar,
   deleteTodo,
   deleteReview,
-  connectCalendar,
+  connectCalendarAuthority,
 };

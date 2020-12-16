@@ -5,11 +5,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BaseEntity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
-  ManyToMany,
-  JoinTable,
 } from 'typeorm';
 import { User } from './User';
 import { UserCalendarAuthority } from './UserCalendarAuthority';
