@@ -77,11 +77,4 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Message, (message) => message.user)
   messages!: Message[];
-
-  @ManyToMany(
-    () => CalendarAuthority,
-    (calendarAuthority) => calendarAuthority.users
-  )
-  @JoinTable()
-  authorities!: CalendarAuthority[];
 }

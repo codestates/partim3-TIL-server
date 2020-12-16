@@ -5,4 +5,5 @@ export interface IMessage {
   otherNickname: string;
   nickname: string;
   messageId: number;
+  answer: boolean;
 }
