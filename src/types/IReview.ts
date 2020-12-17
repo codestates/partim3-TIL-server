@@ -7,4 +7,5 @@ export interface IReview {
   imageUrl: string;
   scheduleTime: string;
   scheduleDate: string;
+  tags: string;
 }
