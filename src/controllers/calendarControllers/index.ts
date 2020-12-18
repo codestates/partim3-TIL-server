@@ -3,8 +3,9 @@ import addReview from './review/addReview';
 import day from './day';
 import addCalendar from './calendar/addCalendar';
 import addTag from './tag/addTag';
-import getCalendars from './calendar/getCalendars';
-import getTags from './tag/getTags';
+import getCalendar from './calendar/getCalendars';
+import getTag from './tag/getTags';
+import getTodo from './todo/getTodo';
 import updateTag from './tag/updateTag';
 import updateTodo from './todo/updateTodo';
 import updateCalendar from './calendar/updateCalendar';
@@ -21,8 +22,9 @@ export default {
   day,
   addCalendar,
   addTag,
-  getCalendars,
-  getTags,
+  getCalendar,
+  getTag,
+  getTodo,
   updateTag,
   updateCalendar,
   updateTodo,

@@ -23,7 +23,8 @@ router.delete('/deletecalendar', calendarController.deleteCalendar);
 router.delete('/deletereview', calendarController.deleteReview);
 
 router.get('/day', calendarController.day);
-router.get('/calendars', calendarController.getCalendars);
-router.get('/tags', calendarController.getTags);
+router.get('/calendars', calendarController.getCalendar);
+router.get('/tags', calendarController.getTag);
+router.get('/todos', calendarController.getTodo);
 
 export default router;
