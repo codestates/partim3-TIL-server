@@ -40,7 +40,9 @@ export default async (req: Request, res: Response) => {
       .setParameters(_calendarAthoritys.getParameters())
       .getMany();
 
-    return res.status(200).json(_todos);
+    return res.status(200).json({
+      todos: _todos,
+    });
   } catch (error) {
     console.log(error);
     return res.status(400).send(error);
