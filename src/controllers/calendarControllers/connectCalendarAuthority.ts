@@ -57,6 +57,12 @@ export default async (req: Request, res: Response) => {
           calenderAuthority: _message.messages[0].shareCalendar,
         })
         .execute();
+
+      await getRepository(Message)
+        .createQueryBuilder('message')
+        .delete()
+        .where('message.id= :messageId', { messageId })
+        .execute();
       return res.status(201).send('수락 -> 권한 연결 완료 및 메세지 삭제');
     } else {
       await getRepository(Message)

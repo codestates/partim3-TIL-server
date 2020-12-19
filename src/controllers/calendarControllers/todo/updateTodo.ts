@@ -84,6 +84,7 @@ export default async (req: Request, res: Response) => {
       .set({
         title,
         scheduleDate,
+        calendar: calendarId,
       })
       .where('id = :todoId', { todoId })
       .execute();

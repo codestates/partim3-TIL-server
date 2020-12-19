@@ -32,21 +32,6 @@ export default async (req: Request, res: Response) => {
   }
 
   try {
-    const _myCalendars = await getRepository(User)
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.myCalendars', 'myCalendars')
-      .where('user.id= :userId', { userId })
-      .andWhere('myCalendars.name = :name', { name })
-      .getOne();
-
-    if (_myCalendars) {
-      return res.status(400).send('이미 있는 캘린더 이름');
-    }
-  } catch (error) {
-    return res.status(400).send(error);
-  }
-
-  try {
     await getConnection()
       .createQueryBuilder()
       .update(Calendar)
