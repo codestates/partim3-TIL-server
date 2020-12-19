@@ -5,6 +5,7 @@ import { Todo } from '../../../db/entities/Todo';
 import { ITodo } from '../../../types/ITodo';
 import { Calendar } from '../../../db/entities/Calendar';
 import { TodoTag } from '../../../db/entities/TodoTag';
+import { Tag } from '../../../db/entities/Tag';
 
 export default async (req: Request, res: Response) => {
   const {
@@ -47,7 +48,6 @@ export default async (req: Request, res: Response) => {
       .where('todos.calendarId = :calendarId', { calendarId })
       .andWhere('todos.id = :todoId', { todoId })
       .getOne();
-
     if (!_myTodo) {
       return res
         .status(400)
@@ -67,6 +67,31 @@ export default async (req: Request, res: Response) => {
       })
       .where('id = :todoId', { todoId })
       .execute();
+
+    const _todo = getRepository(Todo)
+      .createQueryBuilder('todo')
+      .leftJoinAndSelect('todo.todoTags', 'todoTags')
+      .leftJoinAndSelect('todoTags.tag', 'tag')
+      .select('tag.id')
+      .where('todo.id = :todoId', { todoId });
+
+    const _tags = await getRepository(Tag)
+      .createQueryBuilder('tag')
+      .where('tag.id IN (' + _todo.getQuery() + ')')
+      .setParameters(_todo.getParameters())
+      .getMany();
+
+    for await (const e of _tags) {
+      await getConnection()
+        .createQueryBuilder()
+        .delete()
+        .from(TodoTag)
+        .where({
+          tag: e.id,
+          todo: todoId,
+        })
+        .execute();
+    }
 
     for await (const e of tags) {
       await getConnection()
