@@ -5,6 +5,7 @@ import { Calendar } from '../../db/entities/Calendar';
 import { Todo } from '../../db/entities/Todo';
 import { Review } from '../../db/entities/Review';
 import { User } from '../../db/entities/User';
+import { UserCalendarAuthority } from '../../db/entities/UserCalendarAuthority';
 
 export default async (req: Request, res: Response) => {
   const userId = Number(req.query.userId);
@@ -69,9 +70,13 @@ export default async (req: Request, res: Response) => {
     if (!myCalendars) {
       return res.status(400).send('유저 정보 없음');
     } else {
+      let _shareCalendar: UserCalendarAuthority[] = [];
+      if (shareCalendars) {
+        _shareCalendar = shareCalendars.userCalendarAuthorities;
+      }
       return res.status(200).json({
         myCalendars: myCalendars.myCalendars,
-        shareCalendars: shareCalendars?.userCalendarAuthorities,
+        shareCalendars: _shareCalendar,
       });
     }
   } catch (error) {
