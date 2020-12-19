@@ -3,6 +3,7 @@ import { getConnection, getRepository } from 'typeorm';
 import { User } from '../../../db/entities/User';
 import { Review } from '../../../db/entities/Review';
 import { IReview } from '../../../types/IReview';
+import { ReviewTag } from '../../../db/entities/ReviewTag';
 
 export default async (req: Request, res: Response) => {
   const {
@@ -41,7 +42,7 @@ export default async (req: Request, res: Response) => {
   }
 
   try {
-    await getConnection()
+    const _review = await getConnection()
       .createQueryBuilder()
       .insert()
       .into(Review)
@@ -54,6 +55,18 @@ export default async (req: Request, res: Response) => {
         calendar: calendarId,
       })
       .execute();
+
+    for await (const e of tags) {
+      await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(ReviewTag)
+        .values({
+          tag: e,
+          review: _review.identifiers[0].id as number,
+        })
+        .execute();
+    }
 
     return res.status(201).send('Review 생성 완료');
   } catch (error) {
