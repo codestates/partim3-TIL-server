@@ -4,6 +4,7 @@ import { User } from '../../../db/entities/User';
 import { Todo } from '../../../db/entities/Todo';
 import { ITodo } from '../../../types/ITodo';
 import { Calendar } from '../../../db/entities/Calendar';
+import { TodoTag } from '../../../db/entities/TodoTag';
 
 export default async (req: Request, res: Response) => {
   const {
@@ -66,6 +67,18 @@ export default async (req: Request, res: Response) => {
       })
       .where('id = :todoId', { todoId })
       .execute();
+
+    for await (const e of tags) {
+      await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(TodoTag)
+        .values({
+          tag: e,
+          todo: todoId,
+        })
+        .execute();
+    }
 
     return res.status(200).send('TODO 수정 완료');
   } catch (error) {

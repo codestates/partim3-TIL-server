@@ -3,6 +3,7 @@ import { getConnection, getRepository } from 'typeorm';
 import { User } from '../../../db/entities/User';
 import { ITodo } from '../../../types/ITodo';
 import { Todo } from '../../../db/entities/Todo';
+import { TodoTag } from '../../../db/entities/TodoTag';
 
 export default async (req: Request, res: Response) => {
   const { userId, title, scheduleDate, calendarId, tags } = req.body as ITodo;
@@ -32,7 +33,7 @@ export default async (req: Request, res: Response) => {
   }
 
   try {
-    await getConnection()
+    const _todo = await getConnection()
       .createQueryBuilder()
       .insert()
       .into(Todo)
@@ -42,6 +43,18 @@ export default async (req: Request, res: Response) => {
         calendar: calendarId,
       })
       .execute();
+
+    for await (const e of tags) {
+      await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(TodoTag)
+        .values({
+          tag: e,
+          todo: _todo.identifiers[0].id as number,
+        })
+        .execute();
+    }
 
     return res.status(201).send('Todo 생성 완료');
   } catch (error) {
