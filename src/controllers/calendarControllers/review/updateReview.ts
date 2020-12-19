@@ -5,6 +5,7 @@ import { Review } from '../../../db/entities/Review';
 import { Calendar } from '../../../db/entities/Calendar';
 import { IReview } from '../../../types/IReview';
 import { ReviewTag } from '../../../db/entities/ReviewTag';
+import { Tag } from '../../../db/entities/Tag';
 
 export default async (req: Request, res: Response) => {
   const {
@@ -71,6 +72,31 @@ export default async (req: Request, res: Response) => {
       })
       .where('id= :reviewId', { reviewId })
       .execute();
+
+    const _review = getRepository(Review)
+      .createQueryBuilder('review')
+      .leftJoinAndSelect('review.todoTags', 'todoTags')
+      .leftJoinAndSelect('todoTags.tag', 'tag')
+      .select('tag.id')
+      .where('todo.id = :todoId', { reviewId });
+
+    const _tags = await getRepository(Tag)
+      .createQueryBuilder('tag')
+      .where('tag.id IN (' + _review.getQuery() + ')')
+      .setParameters(_review.getParameters())
+      .getMany();
+
+    for await (const e of _tags) {
+      await getConnection()
+        .createQueryBuilder()
+        .delete()
+        .from(ReviewTag)
+        .where({
+          tag: e.id,
+          review: reviewId,
+        })
+        .execute();
+    }
 
     for await (const e of tags) {
       await getConnection()

@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, JoinColumn, BaseEntity } from 'typeorm';
+import { Entity, ManyToOne, BaseEntity } from 'typeorm';
 import { User } from './User';
 import { CalendarAuthority } from './CalendarAuthority';
 
