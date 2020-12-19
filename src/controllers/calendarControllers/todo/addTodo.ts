@@ -33,6 +33,26 @@ export default async (req: Request, res: Response) => {
   }
 
   try {
+    const _myTags = await getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.tags', 'tags')
+      .where('user.id = :userId', { userId })
+      .getOne();
+
+    if (_myTags) {
+      for await (const id of tags) {
+        let isExist = false;
+        for await (const e of _myTags.tags) {
+          if (e.id === id) {
+            isExist = true;
+          }
+        }
+        if (!isExist) {
+          return res.status(400).send('사용자가 가지고 있지 않은 태그');
+        }
+      }
+    }
+
     const _todo = await getConnection()
       .createQueryBuilder()
       .insert()
