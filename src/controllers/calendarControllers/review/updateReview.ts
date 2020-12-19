@@ -4,6 +4,7 @@ import { User } from '../../../db/entities/User';
 import { Review } from '../../../db/entities/Review';
 import { Calendar } from '../../../db/entities/Calendar';
 import { IReview } from '../../../types/IReview';
+import { ReviewTag } from '../../../db/entities/ReviewTag';
 
 export default async (req: Request, res: Response) => {
   const {
@@ -70,6 +71,18 @@ export default async (req: Request, res: Response) => {
       })
       .where('id= :reviewId', { reviewId })
       .execute();
+
+    for await (const e of tags) {
+      await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(ReviewTag)
+        .values({
+          tag: e,
+          review: reviewId,
+        })
+        .execute();
+    }
 
     return res.status(200).send('Review 수정 완료');
   } catch (error) {
