@@ -89,6 +89,7 @@ export default async (req: Request, res: Response) => {
         context,
         imageUrl,
         scheduleTime,
+        calendar: calendarId,
       })
       .where('id= :reviewId', { reviewId })
       .execute();
