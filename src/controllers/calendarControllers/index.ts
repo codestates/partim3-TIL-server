@@ -7,6 +7,7 @@ import getCalendar from './calendar/getCalendars';
 import getTag from './tag/getTags';
 import getTodo from './todo/getTodo';
 import getReview from './review/getReview';
+import filterTags from './tag/filterTags';
 import updateTag from './tag/updateTag';
 import updateTodo from './todo/updateTodo';
 import updateCalendar from './calendar/updateCalendar';
@@ -36,4 +37,5 @@ export default {
   deleteTodo,
   deleteReview,
   connectCalendarAuthority,
+  filterTags,
 };
