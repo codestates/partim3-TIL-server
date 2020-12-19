@@ -44,17 +44,24 @@ export default async (req: Request, res: Response) => {
   }
 
   try {
-    const _myReview = await getRepository(Calendar)
-      .createQueryBuilder('calendar')
+    const _myReview = await getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect(
+        'user.userCalendarAuthorities',
+        'userCalendarAuthorities'
+      )
+      .leftJoinAndSelect(
+        'userCalendarAuthorities.calenderAuthority',
+        'calenderAuthority'
+      )
+      .leftJoinAndSelect('calenderAuthority.calendar', 'calendar')
       .leftJoinAndSelect('calendar.reviews', 'reviews')
-      .where('reviews.calendarId = :calendarId', { calendarId })
+      .where('user.id = :userId', { userId })
       .andWhere('reviews.id = :reviewId', { reviewId })
       .getOne();
 
     if (!_myReview) {
-      return res
-        .status(400)
-        .send('캘린더 정보 없음 또는 가지고 있지 않은 REVIEW');
+      return res.status(400).send('가지고 있지 않은 REVIEW');
     }
   } catch (error) {
     return res.status(400).send(error);
@@ -96,10 +103,10 @@ export default async (req: Request, res: Response) => {
 
     const _review = getRepository(Review)
       .createQueryBuilder('review')
-      .leftJoinAndSelect('review.todoTags', 'todoTags')
-      .leftJoinAndSelect('todoTags.tag', 'tag')
+      .leftJoinAndSelect('review.reviewTags', 'reviewTags')
+      .leftJoinAndSelect('reviewTags.tag', 'tag')
       .select('tag.id')
-      .where('todo.id = :todoId', { reviewId });
+      .where('review.id = :reviewId', { reviewId });
 
     const _tags = await getRepository(Tag)
       .createQueryBuilder('tag')
@@ -133,6 +140,7 @@ export default async (req: Request, res: Response) => {
 
     return res.status(200).send('Review 수정 완료');
   } catch (error) {
+    console.log(error);
     return res.status(400).send(error);
   }
 };

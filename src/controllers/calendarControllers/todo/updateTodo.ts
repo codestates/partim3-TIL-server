@@ -42,16 +42,24 @@ export default async (req: Request, res: Response) => {
   }
 
   try {
-    const _myTodo = await getRepository(Calendar)
-      .createQueryBuilder('calendar')
+    const _myTodo = await getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect(
+        'user.userCalendarAuthorities',
+        'userCalendarAuthorities'
+      )
+      .leftJoinAndSelect(
+        'userCalendarAuthorities.calenderAuthority',
+        'calenderAuthority'
+      )
+      .leftJoinAndSelect('calenderAuthority.calendar', 'calendar')
       .leftJoinAndSelect('calendar.todos', 'todos')
-      .where('todos.calendarId = :calendarId', { calendarId })
+      .where('user.id = :userId', { userId })
       .andWhere('todos.id = :todoId', { todoId })
       .getOne();
+
     if (!_myTodo) {
-      return res
-        .status(400)
-        .send('캘린더 정보 없음 또는 가지고 있지 않은 TODO');
+      return res.status(400).send('가지고 있지 않은 TODO');
     }
   } catch (error) {
     return res.status(400).send(error);
