@@ -33,12 +33,45 @@ export default async (req: Request, res: Response) => {
       .where('user.id = :userId', { userId })
       .getOne();
 
+    const shareCalendars = await getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect(
+        'user.userCalendarAuthorities',
+        'userCalendarAuthorities'
+      )
+      .leftJoinAndSelect(
+        'userCalendarAuthorities.calenderAuthority',
+        'calenderAuthority'
+      )
+      .leftJoinAndSelect('calenderAuthority.calendar', 'calendar')
+      .leftJoinAndSelect(
+        'calendar.todos',
+        'todos',
+        'todos.scheduleDate = :dateString',
+        { dateString }
+      )
+      .leftJoinAndSelect('todos.todoTags', 'todoTags')
+      .leftJoinAndSelect('todoTags.tag', 'todotag')
+      .leftJoinAndSelect(
+        'calendar.reviews',
+        'reviews',
+        'reviews.scheduleDate = :dateString',
+        { dateString }
+      )
+      .leftJoinAndSelect('reviews.reviewTags', 'reviewTags')
+      .leftJoinAndSelect('reviewTags.tag', 'reviewtag')
+      .where('user.id = :userId', { userId })
+      .andWhere('calenderAuthority.owner != :userId', { userId })
+      .getOne();
+
+    console.log(shareCalendars);
+
     if (!myCalendars) {
       return res.status(400).send('유저 정보 없음');
     } else {
       return res.status(200).json({
         myCalendars: myCalendars.myCalendars,
-        shareCalendars: [],
+        shareCalendars: shareCalendars?.userCalendarAuthorities,
       });
     }
   } catch (error) {
