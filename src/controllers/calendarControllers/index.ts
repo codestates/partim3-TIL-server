@@ -6,6 +6,7 @@ import addTag from './tag/addTag';
 import getCalendar from './calendar/getCalendars';
 import getTag from './tag/getTags';
 import getTodo from './todo/getTodo';
+import getReview from './review/getReview';
 import updateTag from './tag/updateTag';
 import updateTodo from './todo/updateTodo';
 import updateCalendar from './calendar/updateCalendar';
@@ -25,6 +26,7 @@ export default {
   getCalendar,
   getTag,
   getTodo,
+  getReview,
   updateTag,
   updateCalendar,
   updateTodo,
