@@ -20,12 +20,16 @@ export default async (req: Request, res: Response) => {
         'todos.scheduleDate = :dateString',
         { dateString }
       )
+      .leftJoinAndSelect('todos.todoTags', 'todoTags')
+      .leftJoinAndSelect('todoTags.tag', 'todotag')
       .leftJoinAndSelect(
         'myCalendars.reviews',
         'reviews',
         'reviews.scheduleDate = :dateString',
         { dateString }
       )
+      .leftJoinAndSelect('reviews.reviewTags', 'reviewTags')
+      .leftJoinAndSelect('reviewTags.tag', 'reviewtag')
       .where('user.id = :userId', { userId })
       .getOne();
 
