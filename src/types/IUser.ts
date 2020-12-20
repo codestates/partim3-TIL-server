@@ -13,4 +13,7 @@ export interface IUser {
   idToken: string;
   newPassword: string;
   messageId: number;
+  read: boolean;
+  write: boolean;
+  auth: boolean;
 }

@@ -1,50 +1,39 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import { Calendar } from '../../db/entities/Calendar';
-import { Todo } from '../../db/entities/Todo';
-import { Review } from '../../db/entities/Review';
 import { User } from '../../db/entities/User';
-import { UserCalendarAuthority } from '../../db/entities/UserCalendarAuthority';
+import { Calendar } from '../../db/entities/Calendar';
+import { CalendarAuthority } from '../../db/entities/CalendarAuthority';
 
 export default async (req: Request, res: Response) => {
   const userId = Number(req.query.userId);
   const dateString = req.query.date as string;
 
   try {
-    const myCalendars = await getRepository(User)
+    const _user = await getRepository(User)
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.myCalendars', 'myCalendars')
-      .leftJoinAndSelect(
-        'myCalendars.todos',
-        'todos',
-        'todos.scheduleDate = :dateString',
-        { dateString }
-      )
-      .leftJoinAndSelect('todos.todoTags', 'todoTags')
-      .leftJoinAndSelect('todoTags.tag', 'todotag')
-      .leftJoinAndSelect(
-        'myCalendars.reviews',
-        'reviews',
-        'reviews.scheduleDate = :dateString',
-        { dateString }
-      )
-      .leftJoinAndSelect('reviews.reviewTags', 'reviewTags')
-      .leftJoinAndSelect('reviewTags.tag', 'reviewtag')
-      .where('user.id = :userId', { userId })
+      .where('user.id= :userId', { userId })
       .getOne();
 
-    const shareCalendars = await getRepository(User)
+    if (!_user) {
+      return res.status(400).send('유저 정보 없음');
+    }
+  } catch (error) {
+    return res.status(400).send(error);
+  }
+
+  try {
+    const _myCalendarsAuthoritys = getRepository(User)
       .createQueryBuilder('user')
-      .leftJoinAndSelect(
-        'user.userCalendarAuthorities',
-        'userCalendarAuthorities'
-      )
-      .leftJoinAndSelect(
-        'userCalendarAuthorities.calenderAuthority',
-        'calenderAuthority'
-      )
-      .leftJoinAndSelect('calenderAuthority.calendar', 'calendar')
+      .leftJoinAndSelect('user.CalendarAuthorities', 'CalendarAuthorities')
+      .select('CalendarAuthorities.calendar')
+      .where('user.id = :userId', { userId })
+      .andWhere('CalendarAuthorities.ownerId = :userId', { userId });
+
+    const _myCalendars = await getRepository(Calendar)
+      .createQueryBuilder('calendar')
+      .where('calendar.id IN (' + _myCalendarsAuthoritys.getQuery() + ')')
+      .setParameters(_myCalendarsAuthoritys.getParameters())
       .leftJoinAndSelect(
         'calendar.todos',
         'todos',
@@ -61,24 +50,41 @@ export default async (req: Request, res: Response) => {
       )
       .leftJoinAndSelect('reviews.reviewTags', 'reviewTags')
       .leftJoinAndSelect('reviewTags.tag', 'reviewtag')
+      .getMany();
+
+    const _shareCalendarsAuthoritys = getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.CalendarAuthorities', 'CalendarAuthorities')
+      .select('CalendarAuthorities.calendar')
       .where('user.id = :userId', { userId })
-      .andWhere('calenderAuthority.owner != :userId', { userId })
-      .getOne();
+      .andWhere('CalendarAuthorities.ownerId != :userId', { userId });
 
-    console.log(shareCalendars);
+    const _shareCalendars = await getRepository(Calendar)
+      .createQueryBuilder('calendar')
+      .where('calendar.id IN (' + _shareCalendarsAuthoritys.getQuery() + ')')
+      .setParameters(_shareCalendarsAuthoritys.getParameters())
+      .leftJoinAndSelect(
+        'calendar.todos',
+        'todos',
+        'todos.scheduleDate = :dateString',
+        { dateString }
+      )
+      .leftJoinAndSelect('todos.todoTags', 'todoTags')
+      .leftJoinAndSelect('todoTags.tag', 'todotag')
+      .leftJoinAndSelect(
+        'calendar.reviews',
+        'reviews',
+        'reviews.scheduleDate = :dateString',
+        { dateString }
+      )
+      .leftJoinAndSelect('reviews.reviewTags', 'reviewTags')
+      .leftJoinAndSelect('reviewTags.tag', 'reviewtag')
+      .getMany();
 
-    if (!myCalendars) {
-      return res.status(400).send('유저 정보 없음');
-    } else {
-      let _shareCalendar: UserCalendarAuthority[] = [];
-      if (shareCalendars) {
-        _shareCalendar = shareCalendars.userCalendarAuthorities;
-      }
-      return res.status(200).json({
-        myCalendars: myCalendars.myCalendars,
-        shareCalendars: _shareCalendar,
-      });
-    }
+    return res.status(200).json({
+      myCalendars: _myCalendars,
+      shareCalendars: _shareCalendars,
+    });
   } catch (error) {
     return res.status(400).send(error);
   }

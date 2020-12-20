@@ -6,4 +6,7 @@ export interface IMessage {
   nickname: string;
   messageId: number;
   answer: boolean;
+  read: boolean;
+  write: boolean;
+  auth: boolean;
 }

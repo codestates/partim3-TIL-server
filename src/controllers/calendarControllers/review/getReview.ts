@@ -22,15 +22,8 @@ export default async (req: Request, res: Response) => {
   try {
     const _calendarAthoritys = getRepository(User)
       .createQueryBuilder('user')
-      .leftJoinAndSelect(
-        'user.userCalendarAuthorities',
-        'userCalendarAuthorities'
-      )
-      .leftJoinAndSelect(
-        'userCalendarAuthorities.calenderAuthority',
-        'calenderAuthority'
-      )
-      .leftJoinAndSelect('calenderAuthority.calendar', 'calendar')
+      .leftJoinAndSelect('user.CalendarAuthorities', 'CalendarAuthorities')
+      .leftJoinAndSelect('CalendarAuthorities.calendar', 'calendar')
       .select('calendar.id')
       .where('user.id = :userId', { userId });
 

@@ -5,20 +5,55 @@ import { User } from '../../db/entities/User';
 import { Message } from '../../db/entities/Message';
 
 export default async (req: Request, res: Response) => {
-  const { userId, otherNickname, description, calendarId } = req.body as IUser;
+  const {
+    userId,
+    otherNickname,
+    read,
+    write,
+    auth,
+    description,
+    calendarId,
+  } = req.body as IUser;
 
   try {
-    const _myCalendars = await getRepository(User)
+    const _user = await getRepository(User)
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.myCalendars', 'myCalendars')
+      .leftJoinAndSelect('user.CalendarAuthorities', 'CalendarAuthorities')
+      .leftJoinAndSelect('CalendarAuthorities.calendar', 'calendar')
       .where('user.id= :userId', { userId })
-      .andWhere('myCalendars.id = :calendarId', { calendarId })
+      .andWhere('CalendarAuthorities.calendarId = :calendarId', {
+        calendarId,
+      })
       .getOne();
 
-    if (!_myCalendars) {
-      return res
-        .status(400)
-        .send('유저 정보 없음 또는 가지고 있지 않은 캘린더');
+    if (_user) {
+      if (_user.nickname === otherNickname) {
+        return res.status(400).send('같은 사용자');
+      }
+      if (!_user.CalendarAuthorities[0].auth) {
+        return res.status(400).send('공유 권한 없음');
+      }
+    } else {
+      return res.status(400).send('유저 정보 없음 또는 권한 없는 캘린더');
+    }
+  } catch (error) {
+    return res.status(400).send(error);
+  }
+
+  try {
+    const _user = await getRepository(User)
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.CalendarAuthorities', 'CalendarAuthorities')
+      .where('user.nickname= :otherNickname', { otherNickname })
+      .andWhere('CalendarAuthorities.calendarId = :calendarId', {
+        calendarId,
+      })
+      .getOne();
+
+    console.log(_user);
+
+    if (_user) {
+      return res.status(400).send('없는 닉네임 또는 공유중인 캘린더');
     }
   } catch (error) {
     return res.status(400).send(error);
@@ -50,11 +85,13 @@ export default async (req: Request, res: Response) => {
           .values({
             description,
             fromUser: userId,
+            read,
+            write,
+            auth,
             shareCalendar: calendarId,
             user: _user.id,
           })
           .execute();
-
         return res.status(201).send('전송 완료');
       }
     } else {

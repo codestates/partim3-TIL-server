@@ -23,7 +23,6 @@ router.delete('/deletecalendar', calendarController.deleteCalendar);
 router.delete('/deletereview', calendarController.deleteReview);
 
 router.get('/day', calendarController.day);
-router.get('/calendars', calendarController.getCalendar);
 router.get('/tags', calendarController.getTag);
 router.get('/todos', calendarController.getTodo);
 router.get('/reviews', calendarController.getReview);

@@ -2,8 +2,8 @@ import { Request, Response } from 'express';
 import { getRepository, getConnection } from 'typeorm';
 import { User } from '../../db/entities/User';
 import { IMessage } from '../../types/IMessage';
-import { UserCalendarAuthority } from '../../db/entities/UserCalendarAuthority';
 import { Message } from '../../db/entities/Message';
+import { CalendarAuthority } from '../../db/entities/CalendarAuthority';
 
 export default async (req: Request, res: Response) => {
   const { userId, messageId, answer } = req.body as IMessage;
@@ -22,23 +22,16 @@ export default async (req: Request, res: Response) => {
         .send('유저 정보 없음 또는 가지고 있지 않은 메세지');
     }
 
-    const _authority = await getRepository(User)
+    const _user = await getRepository(User)
       .createQueryBuilder('user')
-      .leftJoinAndSelect(
-        'user.userCalendarAuthorities',
-        'userCalendarAuthorities'
-      )
-      .innerJoinAndSelect(
-        'userCalendarAuthorities.calenderAuthority',
-        'calenderAuthority'
-      )
+      .leftJoinAndSelect('user.CalendarAuthorities', 'CalendarAuthorities')
       .where('user.id= :userId', { userId })
-      .andWhere('calenderAuthority.calendarId = :calendarId', {
+      .andWhere('CalendarAuthorities.calendarId = :calendarId', {
         calendarId: _message.messages[0].shareCalendar,
       })
       .getOne();
 
-    if (_authority) {
+    if (_user) {
       await getRepository(Message)
         .createQueryBuilder('message')
         .delete()
@@ -47,14 +40,28 @@ export default async (req: Request, res: Response) => {
       return res.status(400).send('공유중인 캘린더(메세지 삭제)');
     }
 
+    const _fromUser = await getRepository(User)
+      .createQueryBuilder('user')
+      .where('user.id = :fromUser', { fromUser: _message.messages[0].fromUser })
+      .getOne();
+
+    if (!_fromUser) {
+      return res.status(400).send('받아온 메세지 주인 없음');
+    }
+
     if (answer) {
       await getConnection()
         .createQueryBuilder()
         .insert()
-        .into(UserCalendarAuthority)
+        .into(CalendarAuthority)
         .values({
+          read: _message.messages[0].read,
+          write: _message.messages[0].write,
+          auth: _message.messages[0].auth,
+          ownerNickname: _fromUser.nickname,
+          calendar: _message.messages[0].shareCalendar,
           user: userId,
-          calenderAuthority: _message.messages[0].shareCalendar,
+          ownerId: _message.messages[0].fromUser,
         })
         .execute();
 

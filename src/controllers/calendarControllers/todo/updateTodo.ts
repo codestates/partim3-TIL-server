@@ -18,24 +18,22 @@ export default async (req: Request, res: Response) => {
   } = req.body as ITodo;
 
   try {
-    const _authority = await getRepository(User)
+    const _user = await getRepository(User)
       .createQueryBuilder('user')
-      .leftJoinAndSelect(
-        'user.userCalendarAuthorities',
-        'userCalendarAuthorities'
-      )
-      .innerJoinAndSelect(
-        'userCalendarAuthorities.calenderAuthority',
-        'calenderAuthority'
-      )
+      .leftJoinAndSelect('user.CalendarAuthorities', 'CalendarAuthorities')
+      .leftJoinAndSelect('CalendarAuthorities.calendar', 'calendar')
       .where('user.id= :userId', { userId })
-      .andWhere('calenderAuthority.calendarId = :calendarId', {
+      .andWhere('CalendarAuthorities.calendarId = :calendarId', {
         calendarId,
       })
       .getOne();
 
-    if (!_authority) {
-      return res.status(400).send('유저 정보 없음 또는 권한이 없는 캘린더');
+    if (_user) {
+      if (!_user.CalendarAuthorities[0].write) {
+        return res.status(400).send('쓰기 권한 없음');
+      }
+    } else {
+      return res.status(400).send('유저 정보 없음 또는 권한 없는 캘린더');
     }
   } catch (error) {
     return res.status(400).send(error);
@@ -44,15 +42,8 @@ export default async (req: Request, res: Response) => {
   try {
     const _myTodo = await getRepository(User)
       .createQueryBuilder('user')
-      .leftJoinAndSelect(
-        'user.userCalendarAuthorities',
-        'userCalendarAuthorities'
-      )
-      .leftJoinAndSelect(
-        'userCalendarAuthorities.calenderAuthority',
-        'calenderAuthority'
-      )
-      .leftJoinAndSelect('calenderAuthority.calendar', 'calendar')
+      .leftJoinAndSelect('user.CalendarAuthorities', 'CalendarAuthorities')
+      .leftJoinAndSelect('CalendarAuthorities.calendar', 'calendar')
       .leftJoinAndSelect('calendar.todos', 'todos')
       .where('user.id = :userId', { userId })
       .andWhere('todos.id = :todoId', { todoId })
@@ -61,11 +52,7 @@ export default async (req: Request, res: Response) => {
     if (!_myTodo) {
       return res.status(400).send('가지고 있지 않은 TODO');
     }
-  } catch (error) {
-    return res.status(400).send(error);
-  }
 
-  try {
     const _myTags = await getRepository(User)
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.tags', 'tags')
