@@ -3,7 +3,6 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { User } from '../../db/entities/User';
 import { Calendar } from '../../db/entities/Calendar';
-import { CalendarAuthority } from '../../db/entities/CalendarAuthority';
 
 export default async (req: Request, res: Response) => {
   const userId = Number(req.query.userId);

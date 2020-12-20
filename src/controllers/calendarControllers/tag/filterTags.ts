@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { User } from '../../../db/entities/User';
-import { Todo } from '../../../db/entities/Todo';
 
 export default async (req: Request, res: Response) => {
   const userId = Number(req.query.userId);
@@ -15,11 +14,6 @@ export default async (req: Request, res: Response) => {
     if (!_user) {
       return res.status(400).send('유저 정보 없음');
     }
-  } catch (error) {
-    return res.status(400).send(error);
-  }
-
-  try {
     const _tags = await getRepository(User)
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.tags', 'tags')
@@ -30,11 +24,12 @@ export default async (req: Request, res: Response) => {
       .where('user.id = :userId', { userId })
       .getOne();
 
-    return res.status(200).json({
-      tags: _tags?.tags,
-    });
+    if (_tags) {
+      return res.status(200).json({
+        tags: _tags.tags,
+      });
+    }
   } catch (error) {
-    console.log(error);
     return res.status(400).send(error);
   }
 };

@@ -50,8 +50,6 @@ export default async (req: Request, res: Response) => {
       })
       .getOne();
 
-    console.log(_user);
-
     if (_user) {
       return res.status(400).send('없는 닉네임 또는 공유중인 캘린더');
     }

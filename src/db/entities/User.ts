@@ -8,7 +8,6 @@ import {
   OneToMany,
 } from 'typeorm';
 import { CalendarAuthority } from './CalendarAuthority';
-import { Calendar } from './Calendar';
 import { Tag } from './Tag';
 import { Message } from './Message';
 
