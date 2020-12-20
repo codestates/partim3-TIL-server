@@ -7,7 +7,6 @@ import {
   BaseEntity,
   OneToMany,
 } from 'typeorm';
-import { UserCalendarAuthority } from './UserCalendarAuthority';
 import { CalendarAuthority } from './CalendarAuthority';
 import { Calendar } from './Calendar';
 import { Tag } from './Tag';
@@ -55,19 +54,10 @@ export class User extends BaseEntity {
   updatedAt!: Date;
 
   @OneToMany(
-    () => UserCalendarAuthority,
-    (userCalendarAuthority) => userCalendarAuthority.user
-  )
-  userCalendarAuthorities!: UserCalendarAuthority[];
-
-  @OneToMany(
     () => CalendarAuthority,
-    (calendarAuthority) => calendarAuthority.owner
+    (calendarAuthority) => calendarAuthority.user
   )
-  myCalendarAuthorities!: CalendarAuthority[];
-
-  @OneToMany(() => Calendar, (calendar) => calendar.owner)
-  myCalendars!: Calendar[];
+  CalendarAuthorities!: CalendarAuthority[];
 
   @OneToMany(() => Tag, (tag) => tag.user)
   tags!: Tag[];

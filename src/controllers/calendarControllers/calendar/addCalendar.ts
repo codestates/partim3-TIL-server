@@ -4,7 +4,6 @@ import { ICalendar } from '../../../types/ICalendar';
 import { Calendar } from '../../../db/entities/Calendar';
 import { CalendarAuthority } from '../../../db/entities/CalendarAuthority';
 import { User } from '../../../db/entities/User';
-import { UserCalendarAuthority } from '../../../db/entities/UserCalendarAuthority';
 
 export default async (req: Request, res: Response) => {
   const { userId, name, color } = req.body as ICalendar;
@@ -25,9 +24,15 @@ export default async (req: Request, res: Response) => {
   try {
     const _myCalendars = await getRepository(User)
       .createQueryBuilder('user')
-      .leftJoinAndSelect('user.myCalendars', 'myCalendars')
+      .leftJoinAndSelect(
+        'user.CalendarAuthorities',
+        'CalendarAuthorities',
+        'CalendarAuthorities.ownerId = :ownerId',
+        { ownerId: userId }
+      )
+      .leftJoinAndSelect('CalendarAuthorities.calendar', 'calendar')
       .where('user.id= :userId', { userId })
-      .andWhere('myCalendars.name = :name', { name })
+      .andWhere('calendar.name = :name', { name })
       .getOne();
 
     if (_myCalendars) {
@@ -50,11 +55,10 @@ export default async (req: Request, res: Response) => {
       .values({
         name,
         color,
-        owner: _user?.id,
       })
       .execute();
 
-    const _calendarAuthority = await getConnection()
+    await getConnection()
       .createQueryBuilder()
       .insert()
       .into(CalendarAuthority)
@@ -64,17 +68,8 @@ export default async (req: Request, res: Response) => {
         auth: true,
         ownerNickname: _user?.nickname,
         calendar: _calendar.identifiers[0].id as number,
-        owner: _user?.id,
-      })
-      .execute();
-
-    await getConnection()
-      .createQueryBuilder()
-      .insert()
-      .into(UserCalendarAuthority)
-      .values({
         user: _user?.id,
-        calenderAuthority: _calendarAuthority.identifiers[0].id as number,
+        ownerId: _user?.id,
       })
       .execute();
 

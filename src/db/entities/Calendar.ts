@@ -6,10 +6,8 @@ import {
   UpdateDateColumn,
   BaseEntity,
   OneToMany,
-  ManyToOne,
 } from 'typeorm';
 import { CalendarAuthority } from './CalendarAuthority';
-import { User } from './User';
 import { Todo } from './Todo';
 import { Review } from './Review';
 
@@ -41,10 +39,4 @@ export class Calendar extends BaseEntity {
 
   @OneToMany(() => Review, (review) => review.calendar)
   reviews!: Review[];
-
-  @ManyToOne(() => User, (user) => user.myCalendars, {
-    nullable: false,
-    onDelete: 'CASCADE',
-  })
-  owner!: number;
 }

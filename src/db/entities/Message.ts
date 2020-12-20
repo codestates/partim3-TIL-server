@@ -18,6 +18,15 @@ export class Message extends BaseEntity {
   fromUser!: number;
 
   @Column()
+  read!: boolean;
+
+  @Column()
+  write!: boolean;
+
+  @Column()
+  auth!: boolean;
+
+  @Column()
   shareCalendar!: number;
 
   @Column({ default: '' })
