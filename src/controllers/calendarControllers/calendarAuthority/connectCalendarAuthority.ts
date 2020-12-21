@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { getRepository, getConnection } from 'typeorm';
-import { User } from '../../db/entities/User';
-import { IMessage } from '../../types/IMessage';
-import { Message } from '../../db/entities/Message';
-import { CalendarAuthority } from '../../db/entities/CalendarAuthority';
+import { User } from '../../../db/entities/User';
+import { IMessage } from '../../../types/IMessage';
+import { Message } from '../../../db/entities/Message';
+import { CalendarAuthority } from '../../../db/entities/CalendarAuthority';
 
 export default async (req: Request, res: Response) => {
   const { userId, messageId, answer } = req.body as IMessage;
@@ -32,10 +32,11 @@ export default async (req: Request, res: Response) => {
       .getOne();
 
     if (_user) {
-      await getRepository(Message)
-        .createQueryBuilder('message')
+      await getConnection()
+        .createQueryBuilder()
         .delete()
-        .where('message.id= :messageId', { messageId })
+        .from(Message)
+        .where('id= :messageId', { messageId })
         .execute();
       return res.status(400).send('공유중인 캘린더(메세지 삭제)');
     }

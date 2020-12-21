@@ -4,6 +4,7 @@ import { User } from '../../../db/entities/User';
 import { ITodo } from '../../../types/ITodo';
 import { Todo } from '../../../db/entities/Todo';
 import { TodoTag } from '../../../db/entities/TodoTag';
+import { Tag } from '../../../db/entities/Tag';
 
 export default async (req: Request, res: Response) => {
   const { userId, title, scheduleDate, calendarId, tags } = req.body as ITodo;
@@ -31,22 +32,20 @@ export default async (req: Request, res: Response) => {
   }
 
   try {
-    const _myTags = await getRepository(User)
-      .createQueryBuilder('user')
-      .leftJoinAndSelect('user.tags', 'tags')
-      .where('user.id = :userId', { userId })
-      .getOne();
+    const _myTags = await getRepository(Tag)
+      .createQueryBuilder('tag')
+      .getMany();
 
     if (_myTags) {
       for await (const id of tags) {
         let isExist = false;
-        for await (const e of _myTags.tags) {
+        for await (const e of _myTags) {
           if (e.id === id) {
             isExist = true;
           }
         }
         if (!isExist) {
-          return res.status(400).send('사용자가 가지고 있지 않은 태그');
+          return res.status(400).send('없는 태그');
         }
       }
     }

@@ -54,6 +54,24 @@ export default async (req: Request, res: Response) => {
       return res.status(400).send('가지고 있지 않은 REVIEW');
     }
 
+    const _myTags = await getRepository(Tag)
+      .createQueryBuilder('tag')
+      .getMany();
+
+    if (_myTags) {
+      for await (const id of tags) {
+        let isExist = false;
+        for await (const e of _myTags) {
+          if (e.id === id) {
+            isExist = true;
+          }
+        }
+        if (!isExist) {
+          return res.status(400).send('없는 태그');
+        }
+      }
+    }
+
     await getConnection()
       .createQueryBuilder()
       .update(Review)

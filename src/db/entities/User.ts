@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { CalendarAuthority } from './CalendarAuthority';
 import { Tag } from './Tag';
+import { Calendar } from './Calendar';
 import { Message } from './Message';
 
 @Entity()
@@ -63,4 +64,7 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Message, (message) => message.user)
   messages!: Message[];
+
+  @OneToMany(() => Calendar, (calendar) => calendar.user)
+  calendars!: Calendar[];
 }

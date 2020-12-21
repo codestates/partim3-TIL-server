@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { getConnection, getRepository } from 'typeorm';
 import { User } from '../../../db/entities/User';
 import { Todo } from '../../../db/entities/Todo';
 import { ITodo } from '../../../types/ITodo';
@@ -48,10 +48,11 @@ export default async (req: Request, res: Response) => {
   }
 
   try {
-    await getRepository(Todo)
-      .createQueryBuilder('todo')
+    await getConnection()
+      .createQueryBuilder()
       .delete()
-      .where('todo.id= :todoId', { todoId })
+      .from(Todo)
+      .where('id= :todoId', { todoId })
       .execute();
 
     return res.status(200).send('TODO 삭제 완료');

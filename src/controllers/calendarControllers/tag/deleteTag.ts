@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { getConnection, getRepository } from 'typeorm';
 import { Tag } from '../../../db/entities/Tag';
 import { User } from '../../../db/entities/User';
 import { ITag } from '../../../types/ITag';
@@ -23,10 +23,11 @@ export default async (req: Request, res: Response) => {
   }
 
   try {
-    await getRepository(Tag)
-      .createQueryBuilder('tag')
+    await getConnection()
+      .createQueryBuilder()
       .delete()
-      .where('tag.id= :tagId', { tagId })
+      .from(Tag)
+      .where('id = :tagId', { tagId })
       .execute();
 
     return res.status(200).send('태그 삭제 완료');
