@@ -5,6 +5,7 @@ import addCalendar from './calendar/addCalendar';
 import addTag from './tag/addTag';
 import getTag from './tag/getTags';
 import getTodo from './todo/getTodo';
+import getCalendarAuthority from './calendarAuthority/getCalendarAuthority';
 import getReview from './review/getReview';
 import filterTags from './tag/filterTags';
 import updateTag from './tag/updateTag';
@@ -15,7 +16,8 @@ import deleteTag from './tag/deleteTag';
 import deleteCalendar from './calendar/deleteCalendar';
 import deleteTodo from './todo/deleteTodo';
 import deleteReview from './review/deleteReview';
-import connectCalendarAuthority from './connectCalendarAuthority';
+import deleteCalendarAuthority from './calendarAuthority/deleteCalendarAuthority';
+import connectCalendarAuthority from './calendarAuthority/connectCalendarAuthority';
 
 export default {
   addTodo,
@@ -26,6 +28,7 @@ export default {
   getTag,
   getTodo,
   getReview,
+  getCalendarAuthority,
   updateTag,
   updateCalendar,
   updateTodo,
@@ -34,6 +37,7 @@ export default {
   deleteCalendar,
   deleteTodo,
   deleteReview,
+  deleteCalendarAuthority,
   connectCalendarAuthority,
   filterTags,
 };

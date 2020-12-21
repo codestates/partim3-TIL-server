@@ -21,11 +21,16 @@ router.delete('/deletetodo', calendarController.deleteTodo);
 router.delete('/deletetag', calendarController.deleteTag);
 router.delete('/deletecalendar', calendarController.deleteCalendar);
 router.delete('/deletereview', calendarController.deleteReview);
+router.delete(
+  '/deletecalendarauthority',
+  calendarController.deleteCalendarAuthority
+);
 
 router.get('/day', calendarController.day);
 router.get('/tags', calendarController.getTag);
 router.get('/todos', calendarController.getTodo);
 router.get('/reviews', calendarController.getReview);
 router.get('/filterTags', calendarController.filterTags);
+router.get('/calendarauthority', calendarController.getCalendarAuthority);
 
 export default router;

@@ -16,4 +16,5 @@ export interface IUser {
   read: boolean;
   write: boolean;
   auth: boolean;
+  authorityId: number;
 }

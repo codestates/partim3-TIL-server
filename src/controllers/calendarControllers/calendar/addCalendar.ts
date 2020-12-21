@@ -55,6 +55,7 @@ export default async (req: Request, res: Response) => {
       .values({
         name,
         color,
+        user: _user?.id,
       })
       .execute();
 

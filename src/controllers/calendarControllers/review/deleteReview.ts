@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { getConnection, getRepository } from 'typeorm';
 import { User } from '../../../db/entities/User';
 import { Review } from '../../../db/entities/Review';
 import { Calendar } from '../../../db/entities/Calendar';
@@ -48,10 +48,11 @@ export default async (req: Request, res: Response) => {
   }
 
   try {
-    await getRepository(Review)
-      .createQueryBuilder('review')
+    await getConnection()
+      .createQueryBuilder()
       .delete()
-      .where('review.id= :reviewId', { reviewId })
+      .from(Review)
+      .where('id = :reviewId', { reviewId })
       .execute();
 
     return res.status(200).send('Review 삭제 완료');

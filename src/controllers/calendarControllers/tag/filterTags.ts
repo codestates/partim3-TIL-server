@@ -19,8 +19,10 @@ export default async (req: Request, res: Response) => {
       .leftJoinAndSelect('user.tags', 'tags')
       .leftJoinAndSelect('tags.todoTags', 'todoTags')
       .leftJoinAndSelect('todoTags.todo', 'todo')
+      .leftJoinAndSelect('todo.calendar', 'todoCalendar')
       .leftJoinAndSelect('tags.reviewTags', 'reviewTags')
       .leftJoinAndSelect('reviewTags.review', 'review')
+      .leftJoinAndSelect('review.calendar', 'reviewCalendar')
       .where('user.id = :userId', { userId })
       .getOne();
 
@@ -30,6 +32,7 @@ export default async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
+    console.log(error);
     return res.status(400).send(error);
   }
 };

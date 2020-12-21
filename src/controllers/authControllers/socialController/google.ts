@@ -7,84 +7,78 @@ import { ISocial } from '../../../types/ISocial';
 
 export default async (req: Request, res: Response) => {
   const { idToken, oauthType } = req.body as ISocial;
-
   const client = new OAuth2Client(process.env.GOOGLE_CLIENTID);
 
-  const ticket = await client.verifyIdToken({
-    idToken,
-    audience: process.env.GOOGLE_CLIENTID,
-  });
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken,
+      audience: process.env.GOOGLE_CLIENTID,
+    });
 
-  const payload = ticket.getPayload();
+    const payload = ticket.getPayload();
 
-  if (payload === undefined) {
-    res.status(409).send('error');
-  } else {
-    const socialId = payload['sub'];
-    const nickname = payload['name'];
-
-    const token = jwt.sign(
-      {
-        socialId,
-      },
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      `${process.env.TOKEN_SECRET}`
-    );
-
-    const user = await getRepository(User)
-      .createQueryBuilder('user')
-      .where('user.socialId= :socialId', { socialId })
-      .getOne();
-
-    if (user === undefined) {
-      await getConnection()
-        .createQueryBuilder()
-        .insert()
-        .into(User)
-        .values({
-          oauthType,
-          nickname,
-          socialId,
-          token,
-        })
-        .execute()
-        .then((result) => {
-          return res.status(201).json({
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            userId: result.generatedMaps[0].id,
-            nickname,
-            token,
-          });
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    if (payload === undefined) {
+      return res.status(400).send('payload undefined');
     } else {
-      await getConnection()
-        .createQueryBuilder()
-        .update(User)
-        .set({ token })
-        .where('socialId = :socialId', { socialId })
-        .execute()
-        .catch((error) => {
-          console.log(error);
-        });
+      const socialId = payload['sub'];
+      const nickname = payload['name'];
 
-      await getRepository(User)
+      const token = jwt.sign(
+        {
+          socialId,
+        },
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        `${process.env.TOKEN_SECRET}`
+      );
+
+      const user = await getRepository(User)
         .createQueryBuilder('user')
         .where('user.socialId= :socialId', { socialId })
-        .getOne()
-        .then((result) => {
-          return res.status(201).json({
-            userId: result?.id,
-            nickname: result?.nickname,
-            token: result?.token,
-          });
-        })
-        .catch((error) => {
-          console.log(error);
+        .getOne();
+
+      if (user === undefined) {
+        const _user = await getConnection()
+          .createQueryBuilder()
+          .insert()
+          .into(User)
+          .values({
+            oauthType,
+            nickname,
+            socialId,
+            token,
+          })
+          .execute();
+
+        return res.status(201).json({
+          userId: _user.identifiers[0].id as number,
+          nickname,
+          token,
         });
+      } else {
+        const _user = await getRepository(User)
+          .createQueryBuilder('user')
+          .where('user.socialId= :socialId', { socialId })
+          .getOne();
+
+        if (!_user) {
+          res.status(400).send('등록되지 않은 유저');
+        } else {
+          await getConnection()
+            .createQueryBuilder()
+            .update(User)
+            .set({ token })
+            .where('socialId = :socialId', { socialId })
+            .execute();
+
+          return res.status(200).json({
+            userId: _user.id,
+            nickname: _user.nickname,
+            token: token,
+          });
+        }
+      }
     }
+  } catch (error) {
+    return res.status(400);
   }
-  return res.status(400);
 };
