@@ -72,6 +72,11 @@ export default async (req: Request, res: Response) => {
       .where('user.nickname= :otherNickname', { otherNickname })
       .getOne();
 
+    const fromUser = await getRepository(User)
+      .createQueryBuilder('user')
+      .where('user.id = :userId', { userId })
+      .getOne();
+
     if (_user) {
       if (_user.messages.length > 0) {
         return res.status(400).send('전송된 공유');
@@ -83,6 +88,7 @@ export default async (req: Request, res: Response) => {
           .values({
             description,
             fromUser: userId,
+            fromUserNickname: fromUser?.nickname,
             read,
             write,
             auth,
