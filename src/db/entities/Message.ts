@@ -18,6 +18,9 @@ export class Message extends BaseEntity {
   fromUser!: number;
 
   @Column()
+  fromUserNickname!: string;
+
+  @Column()
   read!: boolean;
 
   @Column()
