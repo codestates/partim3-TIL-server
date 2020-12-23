@@ -30,6 +30,7 @@ router.get('/day', calendarController.day);
 router.get('/tags', calendarController.getTag);
 router.get('/todos', calendarController.getTodo);
 router.get('/reviews', calendarController.getReview);
+router.get('/calendars', calendarController.getCalendar);
 router.get('/filterTags', calendarController.filterTags);
 router.get('/calendarauthority', calendarController.getCalendarAuthority);
 
