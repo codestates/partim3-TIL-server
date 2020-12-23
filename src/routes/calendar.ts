@@ -33,5 +33,9 @@ router.get('/reviews', calendarController.getReview);
 router.get('/calendars', calendarController.getCalendar);
 router.get('/filterTags', calendarController.filterTags);
 router.get('/calendarauthority', calendarController.getCalendarAuthority);
+router.get(
+  '/getcalendarauthorityofcalendar',
+  calendarController.getCalendarAuthorityOfCalendar
+);
 
 export default router;
