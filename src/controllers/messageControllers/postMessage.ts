@@ -3,6 +3,7 @@ import { getRepository, getConnection } from 'typeorm';
 import { IUser } from '../../types/IUser';
 import { User } from '../../db/entities/User';
 import { Message } from '../../db/entities/Message';
+import { Calendar } from '../../db/entities/Calendar';
 
 export default async (req: Request, res: Response) => {
   const {
@@ -72,6 +73,11 @@ export default async (req: Request, res: Response) => {
       .where('user.nickname= :otherNickname', { otherNickname })
       .getOne();
 
+    const _calendar = await getRepository(Calendar)
+      .createQueryBuilder('calendar')
+      .where('calendar.id = :calendarId', { calendarId })
+      .getOne();
+
     const fromUser = await getRepository(User)
       .createQueryBuilder('user')
       .where('user.id = :userId', { userId })
@@ -93,6 +99,7 @@ export default async (req: Request, res: Response) => {
             write,
             auth,
             shareCalendar: calendarId,
+            shareCalendarName: _calendar?.name,
             user: _user.id,
           })
           .execute();

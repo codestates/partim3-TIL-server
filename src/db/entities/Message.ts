@@ -14,11 +14,14 @@ export class Message extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ nullable: false })
   fromUser!: number;
 
-  @Column()
+  @Column({ nullable: false })
   fromUserNickname!: string;
+
+  @Column({ nullable: false })
+  shareCalendarName!: string;
 
   @Column()
   read!: boolean;
