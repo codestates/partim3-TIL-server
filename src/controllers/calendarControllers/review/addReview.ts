@@ -6,7 +6,7 @@ import { IReview } from '../../../types/IReview';
 import { ReviewTag } from '../../../db/entities/ReviewTag';
 import { Tag } from '../../../db/entities/Tag';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const {
     userId,
     title,

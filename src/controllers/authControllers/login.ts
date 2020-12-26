@@ -4,8 +4,10 @@ import { User } from '../../db/entities/User';
 import { IUser } from '../../types/IUser';
 import jwt from 'jsonwebtoken';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const { email, password } = req.body as IUser;
+
+  const token_secret = String(process.env.TOKEN_SECRET);
 
   try {
     const _user = await getRepository(User)
@@ -17,15 +19,11 @@ export default async (req: Request, res: Response) => {
     if (!_user) {
       return res.status(401).send('잘못된 이메일 또는 잘못된 비밀번호');
     }
+    const _userId = _user.id;
 
-    // eslint-disable-next-line @typescript-eslint/await-thenable
-    const token = await jwt.sign(
-      {
-        email,
-      },
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      `${process.env.TOKEN_SECRET}`
-    );
+    const token = jwt.sign({ _userId }, token_secret, {
+      expiresIn: '30 minutes',
+    });
 
     await getConnection()
       .createQueryBuilder()

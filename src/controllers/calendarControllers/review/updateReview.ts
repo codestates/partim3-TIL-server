@@ -6,7 +6,7 @@ import { IReview } from '../../../types/IReview';
 import { ReviewTag } from '../../../db/entities/ReviewTag';
 import { Tag } from '../../../db/entities/Tag';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const {
     userId,
     calendarId,
@@ -124,7 +124,6 @@ export default async (req: Request, res: Response) => {
 
     return res.status(200).send('Review 수정 완료');
   } catch (error) {
-    console.log(error);
     return res.status(400).send(error);
   }
 };

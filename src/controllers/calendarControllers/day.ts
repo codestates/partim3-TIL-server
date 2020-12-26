@@ -3,7 +3,7 @@ import { getRepository } from 'typeorm';
 import { User } from '../../db/entities/User';
 import { Calendar } from '../../db/entities/Calendar';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const userId = Number(req.query.userId);
   const dateString = req.query.date as string;
 

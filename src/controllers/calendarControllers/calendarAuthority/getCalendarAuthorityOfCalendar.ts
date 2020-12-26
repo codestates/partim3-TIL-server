@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { Calendar } from '../../../db/entities/Calendar';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const calendarId = Number(req.query.calendarId);
 
   try {
@@ -22,7 +22,6 @@ export default async (req: Request, res: Response) => {
       return res.status(400).send('없는 캘린더');
     }
   } catch (error) {
-    console.log(error);
     return res.status(400).send(error);
   }
 };

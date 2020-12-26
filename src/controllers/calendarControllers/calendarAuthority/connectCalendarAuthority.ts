@@ -5,7 +5,7 @@ import { IMessage } from '../../../types/IMessage';
 import { Message } from '../../../db/entities/Message';
 import { CalendarAuthority } from '../../../db/entities/CalendarAuthority';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const { userId, messageId, answer } = req.body as IMessage;
 
   try {

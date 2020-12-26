@@ -5,7 +5,7 @@ import { Calendar } from '../../../db/entities/Calendar';
 import { CalendarAuthority } from '../../../db/entities/CalendarAuthority';
 import { User } from '../../../db/entities/User';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const { userId, name, color } = req.body as ICalendar;
 
   try {
