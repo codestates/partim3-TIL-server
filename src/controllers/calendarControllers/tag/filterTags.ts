@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { User } from '../../../db/entities/User';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const userId = Number(req.query.userId);
 
   try {
@@ -30,9 +30,10 @@ export default async (req: Request, res: Response) => {
       return res.status(200).json({
         tags: _tags.tags,
       });
+    } else {
+      return res.status(400).send('태그 없음');
     }
   } catch (error) {
-    console.log(error);
     return res.status(400).send(error);
   }
 };

@@ -5,9 +5,11 @@ import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
 import { ISocial } from '../../../types/ISocial';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const { idToken, oauthType } = req.body as ISocial;
   const client = new OAuth2Client(process.env.GOOGLE_CLIENTID);
+
+  const token_secret = String(process.env.TOKEN_SECRET);
 
   try {
     const ticket = await client.verifyIdToken({
@@ -23,14 +25,6 @@ export default async (req: Request, res: Response) => {
       const socialId = payload['sub'];
       const nickname = payload['name'];
 
-      const token = jwt.sign(
-        {
-          socialId,
-        },
-        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-        `${process.env.TOKEN_SECRET}`
-      );
-
       const user = await getRepository(User)
         .createQueryBuilder('user')
         .where('user.socialId= :socialId', { socialId })
@@ -45,6 +39,19 @@ export default async (req: Request, res: Response) => {
             oauthType,
             nickname,
             socialId,
+          })
+          .execute();
+
+        const userId = _user.identifiers[0].id as number;
+
+        const token = jwt.sign({ userId }, token_secret, {
+          expiresIn: '30 minutes',
+        });
+
+        await getConnection()
+          .createQueryBuilder()
+          .update(User)
+          .set({
             token,
           })
           .execute();
@@ -61,8 +68,14 @@ export default async (req: Request, res: Response) => {
           .getOne();
 
         if (!_user) {
-          res.status(400).send('등록되지 않은 유저');
+          return res.status(400).send('등록되지 않은 유저');
         } else {
+          const userId = _user.id;
+
+          const token = jwt.sign({ userId }, token_secret, {
+            expiresIn: '30 minutes',
+          });
+
           await getConnection()
             .createQueryBuilder()
             .update(User)
@@ -79,6 +92,6 @@ export default async (req: Request, res: Response) => {
       }
     }
   } catch (error) {
-    return res.status(400);
+    return res.status(400).send(error);
   }
 };

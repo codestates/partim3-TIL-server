@@ -4,7 +4,7 @@ import { User } from '../../../db/entities/User';
 import { Tag } from '../../../db/entities/Tag';
 import { ITag } from '../../../types/ITag';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const { userId, tagId, tagName, tagColor, description } = req.body as ITag;
 
   try {

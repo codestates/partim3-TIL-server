@@ -3,7 +3,7 @@ import { getRepository } from 'typeorm';
 import { User } from '../../db/entities/User';
 import { IUser } from '../../types/IUser';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const { nickname } = req.body as IUser;
 
   try {

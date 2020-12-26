@@ -4,7 +4,7 @@ import { CalendarAuthority } from '../../../db/entities/CalendarAuthority';
 import { User } from '../../../db/entities/User';
 import { IUser } from '../../../types/IUser';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const { userId, authorityId } = req.body as IUser;
 
   try {
@@ -28,8 +28,6 @@ export default async (req: Request, res: Response) => {
       .andWhere('calendarAuthority.id = :authorityId', { authorityId })
       .getOne();
 
-    console.log(_authority);
-
     if (_authority) {
       if (_authority.id === authorityId) {
         await getConnection()
@@ -40,6 +38,8 @@ export default async (req: Request, res: Response) => {
           .execute();
 
         return res.status(200).send('권한 삭제 완료');
+      } else {
+        return res.status(400).send('권한 아이디 불일치');
       }
     } else {
       return res.status(400).send('없는 권한');

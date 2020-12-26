@@ -5,7 +5,7 @@ import { User } from '../../db/entities/User';
 import { Message } from '../../db/entities/Message';
 import { Calendar } from '../../db/entities/Calendar';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const {
     userId,
     otherNickname,

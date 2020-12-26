@@ -6,7 +6,7 @@ import { Todo } from '../../../db/entities/Todo';
 import { TodoTag } from '../../../db/entities/TodoTag';
 import { Tag } from '../../../db/entities/Tag';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const { userId, title, scheduleDate, calendarId, tags } = req.body as ITodo;
 
   try {

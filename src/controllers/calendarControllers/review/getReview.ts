@@ -3,7 +3,7 @@ import { getRepository } from 'typeorm';
 import { User } from '../../../db/entities/User';
 import { Review } from '../../../db/entities/Review';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const userId = Number(req.query.userId);
 
   try {
@@ -37,7 +37,6 @@ export default async (req: Request, res: Response) => {
       reviews: _reviews,
     });
   } catch (error) {
-    console.log(error);
     return res.status(400).send(error);
   }
 };

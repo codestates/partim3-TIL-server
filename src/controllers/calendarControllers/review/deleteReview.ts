@@ -5,7 +5,7 @@ import { Review } from '../../../db/entities/Review';
 import { Calendar } from '../../../db/entities/Calendar';
 import { IReview } from '../../../types/IReview';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const { userId, calendarId, reviewId } = req.body as IReview;
 
   try {

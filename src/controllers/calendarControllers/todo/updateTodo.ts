@@ -3,11 +3,10 @@ import { getConnection, getRepository } from 'typeorm';
 import { User } from '../../../db/entities/User';
 import { Todo } from '../../../db/entities/Todo';
 import { ITodo } from '../../../types/ITodo';
-import { Calendar } from '../../../db/entities/Calendar';
 import { TodoTag } from '../../../db/entities/TodoTag';
 import { Tag } from '../../../db/entities/Tag';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const {
     userId,
     calendarId,

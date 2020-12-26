@@ -4,7 +4,7 @@ import { User } from '../../../db/entities/User';
 import { Calendar } from '../../../db/entities/Calendar';
 import { ICalendar } from '../../../types/ICalendar';
 
-export default async (req: Request, res: Response) => {
+export default async (req: Request, res: Response): Promise<Response> => {
   const { userId, calendarId, name, color } = req.body as ICalendar;
 
   try {
