@@ -14,6 +14,7 @@ export default async (req: Request, res: Response): Promise<Response> => {
     title,
     context,
     imageUrl,
+    scheduleDate,
     scheduleTime,
     tags,
   } = req.body as IReview;
@@ -79,6 +80,7 @@ export default async (req: Request, res: Response): Promise<Response> => {
         title,
         context,
         imageUrl,
+        scheduleDate,
         scheduleTime,
         calendar: calendarId,
       })
