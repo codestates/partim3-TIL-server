@@ -19,7 +19,7 @@ export class Review extends BaseEntity {
   @Column()
   title!: string;
 
-  @Column()
+  @Column('text')
   context!: string;
 
   @Column()
