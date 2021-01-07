@@ -8,7 +8,7 @@ export default async (req: Request, res: Response): Promise<Response> => {
       .createQueryBuilder('user')
       .getCount();
 
-    return res.status(200).send(_userCount);
+    return res.status(200).send(_userCount.toString());
   } catch (error) {
     return res.status(400).send(error);
   }
