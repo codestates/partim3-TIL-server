@@ -8,6 +8,7 @@ router.post('/message', messageController.postMessage);
 router.post('/isuser', usercontroller.isUser);
 
 router.get('/user', usercontroller.getUser);
+router.get('/lastnumber', usercontroller.getLastNumber);
 
 router.put('/updateuser', usercontroller.updateUser);
 
