@@ -56,10 +56,10 @@ export default async (req: Request, res: Response): Promise<Response> => {
           })
           .execute();
 
+        res.setHeader('authorization', token);
         return res.status(201).json({
           userId: _user.identifiers[0].id as number,
           nickname,
-          token,
         });
       } else {
         const _user = await getRepository(User)
@@ -83,10 +83,10 @@ export default async (req: Request, res: Response): Promise<Response> => {
             .where('socialId = :socialId', { socialId })
             .execute();
 
+          res.setHeader('authorization', token);
           return res.status(200).json({
             userId: _user.id,
             nickname: _user.nickname,
-            token: token,
           });
         }
       }
