@@ -1,11 +1,11 @@
 import updateUser from './updateUser';
 import getUser from './getUser';
 import isUser from './isUser';
-import getLastNumber from './getLastNumber';
+import getLastIndexofUsers from './getLastIndexofUsers';
 
 export default {
   updateUser,
   getUser,
   isUser,
-  getLastNumber,
+  getLastIndexofUsers,
 };
