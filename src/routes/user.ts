@@ -8,9 +8,9 @@ router.post('/message', messageController.postMessage);
 router.post('/isuser', usercontroller.isUser);
 
 router.get('/user', usercontroller.getUser);
-router.get('/lastnumber', usercontroller.getLastNumber);
+router.get('/lastindex', usercontroller.getLastIndexofUsers);
 
-router.put('/updateuser', usercontroller.updateUser);
+router.put('/user', usercontroller.updateUser);
 
 router.get('/message', messageController.getMessage);
 

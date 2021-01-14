@@ -32,10 +32,10 @@ export default async (req: Request, res: Response): Promise<Response> => {
       .where('email = :email', { email })
       .execute();
 
+    res.setHeader('authorization', token);
     return res.status(200).json({
       userId: _user.id,
       nickname: _user.nickname,
-      token,
     });
   } catch (error) {
     return res.status(400).send(error);

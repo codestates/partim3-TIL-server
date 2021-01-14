@@ -5,26 +5,23 @@ const router = express.Router();
 
 router.post('/todo', calendarController.addTodo);
 router.post('/review', calendarController.addReview);
-router.post('/addtag', calendarController.addTag);
-router.post('/addcalendar', calendarController.addCalendar);
+router.post('/tag', calendarController.addTag);
+router.post('/calendar', calendarController.addCalendar);
 router.post(
   '/connectcalendarauthority',
   calendarController.connectCalendarAuthority
 );
 
-router.put('/updatetag', calendarController.updateTag);
-router.put('/updatecalender', calendarController.updateCalendar);
-router.put('/updatetodo', calendarController.updateTodo);
-router.put('/updatereview', calendarController.updateReview);
+router.put('/tag', calendarController.updateTag);
+router.put('/calender', calendarController.updateCalendar);
+router.put('/todo', calendarController.updateTodo);
+router.put('/review', calendarController.updateReview);
 
-router.delete('/deletetodo', calendarController.deleteTodo);
-router.delete('/deletetag', calendarController.deleteTag);
-router.delete('/deletecalendar', calendarController.deleteCalendar);
-router.delete('/deletereview', calendarController.deleteReview);
-router.delete(
-  '/deletecalendarauthority',
-  calendarController.deleteCalendarAuthority
-);
+router.delete('/todo', calendarController.deleteTodo);
+router.delete('/tag', calendarController.deleteTag);
+router.delete('/calendar', calendarController.deleteCalendar);
+router.delete('/review', calendarController.deleteReview);
+router.delete('/calendarauthority', calendarController.deleteCalendarAuthority);
 
 router.get('/day', calendarController.day);
 router.get('/tags', calendarController.getTag);
@@ -34,7 +31,7 @@ router.get('/calendars', calendarController.getCalendar);
 router.get('/filterTags', calendarController.filterTags);
 router.get('/calendarauthority', calendarController.getCalendarAuthority);
 router.get(
-  '/getcalendarauthorityofcalendar',
+  '/calendarauthorityofcalendar',
   calendarController.getCalendarAuthorityOfCalendar
 );
 
