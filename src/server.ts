@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === 'production') {
       origin: [
         'https://til-log.me',
         'http://til-log.me',
-        'http://til-log.me.s3-website.ap-northeast-2.amazonaws.com/',
+        'http://til-log.me.s3-website.ap-northeast-2.amazonaws.com',
       ],
       credentials: true,
     })
